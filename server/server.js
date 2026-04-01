@@ -37,15 +37,27 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Error Handler
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/shopdb';
+// Export the Express app for Vercel Serverless Functions
+module.exports = app;
 
-mongoose.connect(MONGO_URI)
-  .then(() => {
-    console.log('MongoDB Connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch(err => {
-    console.error('Database connection error:', err.message);
-    process.exit(1);
-  });
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/shopdb';
+
+  mongoose.connect(MONGO_URI)
+    .then(() => {
+      console.log('Local MongoDB Connected');
+      app.listen(PORT, () => console.log(`Server running locally on port ${PORT}`));
+    })
+    .catch(err => {
+      console.error('Local Database connection error:', err.message);
+    });
+} else {
+  // On Vercel, we connect to the cloud DB (MongoDB Atlas)
+  const MONGO_URI = process.env.MONGO_URI;
+  if (MONGO_URI) {
+    mongoose.connect(MONGO_URI)
+      .then(() => console.log('Vercel Cloud MongoDB Connected'))
+      .catch(err => console.error('Cloud Database connection error:', err.message));
+  }
+}
