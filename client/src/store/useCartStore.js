@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 const useCartStore = create((set, get) => ({
+  apiUrl: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   cart: { items: [] },
   loading: false,
 
@@ -54,11 +55,11 @@ const useCartStore = create((set, get) => ({
   },
 
   syncCart: async () => {
-    const { cart } = get();
+    const { cart, apiUrl } = get();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     if (userInfo && userInfo.token) {
       try {
-        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/cart`, {
+        await axios.post(`${apiUrl}/cart`, {
           items: cart.items.map(i => ({ product: i.product._id, qty: i.qty }))
         }, {
           headers: { Authorization: `Bearer ${userInfo.token}` }
@@ -73,7 +74,8 @@ const useCartStore = create((set, get) => ({
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     if (userInfo && userInfo.token) {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/cart`, {
+        const { apiUrl } = get();
+        const { data } = await axios.get(`${apiUrl}/cart`, {
           headers: { Authorization: `Bearer ${userInfo.token}` }
         });
         set({ cart: data });

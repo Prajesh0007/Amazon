@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const useProductStore = create((set) => ({
+const useProductStore = create((set, get) => ({
+  // Fallback to relative /api for Vercel production environments
+  apiUrl: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   products: [],
   product: null,
   loading: false,
@@ -14,7 +16,8 @@ const useProductStore = create((set) => ({
     const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '' } = params;
     
     try {
-      const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`;
+      const { apiUrl } = get();
+      const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`;
       const { data } = await axios.get(url);
       
       set({ 
@@ -39,7 +42,8 @@ const useProductStore = create((set) => ({
   fetchMoreProducts: async (params = {}) => {
     const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '' } = params;
     try {
-      const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`;
+      const { apiUrl } = get();
+      const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`;
       const { data } = await axios.get(url);
       
       set((state) => ({ 
@@ -59,7 +63,8 @@ const useProductStore = create((set) => ({
   fetchProductById: async (id) => {
     set({ loading: true, error: null });
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/products/${id}`);
+      const { apiUrl } = get();
+      const { data } = await axios.get(`${apiUrl}/products/${id}`);
       set({ product: data, loading: false });
     } catch (error) {
       set({ 
@@ -72,7 +77,8 @@ const useProductStore = create((set) => ({
   aiSearch: async (query) => {
     set({ loading: true, error: null });
     try {
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/ai/search`, { query });
+      const { apiUrl } = get();
+      const { data } = await axios.post(`${apiUrl}/ai/search`, { query });
       set({ 
         products: data.products, 
         loading: false 

@@ -1,9 +1,8 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-const useAuthStore = create((set) => ({
+const useAuthStore = create((set, get) => ({
+  apiUrl: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   user: JSON.parse(localStorage.getItem('userInfo')) || null,
   loading: false,
   error: null,
@@ -11,7 +10,8 @@ const useAuthStore = create((set) => ({
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
-      const { data } = await axios.post(`${API_URL}/auth/login`, { email, password });
+      const { apiUrl } = get();
+      const { data } = await axios.post(`${apiUrl}/auth/login`, { email, password });
       set({ user: data, loading: false });
       localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
@@ -25,7 +25,8 @@ const useAuthStore = create((set) => ({
   register: async (name, email, password) => {
     set({ loading: true, error: null });
     try {
-      const { data } = await axios.post(`${API_URL}/auth/register`, { name, email, password });
+      const { apiUrl } = get();
+      const { data } = await axios.post(`${apiUrl}/auth/register`, { name, email, password });
       set({ user: data, loading: false });
       localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
