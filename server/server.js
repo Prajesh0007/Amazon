@@ -19,6 +19,30 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 
+// DB Connection Middleware for Serverless Environment
+app.use(async (req, res, next) => {
+  const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/shopdb';
+  
+  if (mongoose.connection.readyState === 1) {
+    return next();
+  }
+
+  if (mongoose.connection.readyState === 2) {
+    return next();
+  }
+
+  try {
+    await mongoose.connect(MONGO_URI, {
+      serverSelectionTimeoutMS: 5000 // Add a timeout to prevent hanging
+    });
+    console.log('MongoDB Connected successfully');
+    next();
+  } catch (error) {
+    console.error('MongoDB Connection Error:', error);
+    res.status(500).json({ message: 'Database connection failed. Please check IP Whitelist and Credentials.', error: error.message });
+  }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
@@ -42,22 +66,15 @@ module.exports = app;
 
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
+  // Let the middleware handle DB connection on the first request, 
+  // or connect here to be ready before listen
   const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/shopdb';
-
   mongoose.connect(MONGO_URI)
     .then(() => {
-      console.log('Local MongoDB Connected');
+      console.log('Local MongoDB Pre-Connected');
       app.listen(PORT, () => console.log(`Server running locally on port ${PORT}`));
     })
     .catch(err => {
       console.error('Local Database connection error:', err.message);
     });
-} else {
-  // On Vercel, we connect to the cloud DB (MongoDB Atlas)
-  const MONGO_URI = process.env.MONGO_URI;
-  if (MONGO_URI) {
-    mongoose.connect(MONGO_URI)
-      .then(() => console.log('Vercel Cloud MongoDB Connected'))
-      .catch(err => console.error('Cloud Database connection error:', err.message));
-  }
 }
