@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import { Github, Twitter, Instagram, Facebook, ArrowUp } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -39,7 +39,7 @@ const Footer = () => {
         <div>
           <h4 className="font-bold text-lg mb-4">Make Money with Us</h4>
           <ul className="space-y-2 text-gray-300 text-sm">
-            <li><a href="#" className="hover:underline">Sell on Amazon</a></li>
+            <li><Link to="/seller" className="hover:underline">Sell on Amazon</Link></li>
             <li><a href="#" className="hover:underline">Protect and Build Your Brand</a></li>
             <li><a href="#" className="hover:underline">Amazon Global Selling</a></li>
             <li><a href="#" className="hover:underline">Become an Affiliate</a></li>

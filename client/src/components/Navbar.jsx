@@ -43,6 +43,7 @@ const Navbar = () => {
     { title: 'Electronics', path: '/search?category=Electronics' },
     { title: 'Home & Kitchen', path: '/search?category=Home' },
     { title: 'Fashion', path: '/search?category=Fashion' },
+    { title: 'Sell', path: '/seller' },
   ];
 
   return (
