@@ -32,15 +32,15 @@ const SellerDashboard = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${user.token}`
         }
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Registration failed');
       
+      updateUser({ role: 'seller' });
       setIsSeller(true);
       toast.success('Successfully registered as a Seller!');
-      // Update local storage/store ideally, mocked here.
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -51,7 +51,7 @@ const SellerDashboard = () => {
   const fetchSellerProducts = async () => {
     try {
       const res = await fetch('/api/seller/products', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${user.token}` }
       });
       const data = await res.json();
       if (res.ok) setProducts(data);
@@ -67,7 +67,7 @@ const SellerDashboard = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${user.token}`
         },
         body: JSON.stringify(newProduct)
       });
