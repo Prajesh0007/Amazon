@@ -7,7 +7,13 @@ const Review = require('./models/Review');
 const seedData = async () => {
   try {
     const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/shopdb';
-    await mongoose.connect(MONGO_URI);
+    const options = {
+      serverSelectionTimeoutMS: 60000,
+      socketTimeoutMS: 60000,
+      connectTimeoutMS: 60000,
+      family: 4 // Force IPv4
+    };
+    await mongoose.connect(MONGO_URI, options);
     console.log('Connected to MongoDB for Mega-Seeding...');
 
     // Clear existing data
@@ -66,54 +72,64 @@ const seedData = async () => {
 
     console.log('Generating 100,000 minimal items...');
     const totalItems = 100000;
-    const batchSize = 1000; // larger batches for fast DB populating
+    const batchSize = 100; // MUCH smaller batches for Atlas Free Tier reliability
 
     for (let i = 0; i < totalItems; i += batchSize) {
-        const batch = [];
-        for (let j = 0; j < batchSize; j++) {
-            const currentId = i + j + 1;
-            const catObj = categories[Math.floor(Math.random() * categories.length)];
-            const brand = brands[catObj.name][Math.floor(Math.random() * brands[catObj.name].length)];
-            const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-            
-            const price = Math.floor(Math.random() * 80000) + 500;
-            const rating = parseFloat((Math.random() * 1.5 + 3.5).toFixed(1));
+        try {
+            const batch = [];
+            for (let j = 0; j < Math.min(batchSize, totalItems - i); j++) {
+                const currentId = i + j + 1;
+                const catObj = categories[Math.floor(Math.random() * categories.length)];
+                const brand = brands[catObj.name][Math.floor(Math.random() * brands[catObj.name].length)];
+                const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+                
+                const price = Math.floor(Math.random() * 80000) + 500;
+                const rating = parseFloat((Math.random() * 1.5 + 3.5).toFixed(1));
 
-            // Pool images for multiple views
-            const imgPool = categoryImages[catObj.name];
-            const img1 = imgPool[j % imgPool.length];
-            const img2 = imgPool[(j + 1) % imgPool.length];
-            const img3 = imgPool[(j + 2) % imgPool.length];
-            const img4 = imgPool[(j + 3) % imgPool.length];
+                // Pool images for multiple views
+                const imgPool = categoryImages[catObj.name];
+                const img1 = imgPool[j % imgPool.length];
+                const img2 = imgPool[(j + 1) % imgPool.length];
+                const img3 = imgPool[(j + 2) % imgPool.length];
+                const img4 = imgPool[(j + 3) % imgPool.length];
 
-            // Minimal payload to save database size but rich enough for UI testing
-            batch.push({
-                name: `${adj} ${brand} ${catObj.name.substring(0,3)}#${currentId}`,
-                description: `A fine ${brand} ${catObj.name}. Features elegant design.`,
-                price: price,
-                category: catObj.name,
-                brand: brand,
-                manufacturer: `${brand} Corporation`,
-                stock: Math.floor(Math.random() * 200) + 10,
-                rating: rating,
-                numReviews: Math.floor(Math.random() * 500) + 5,
-                images: [
-                    `https://images.unsplash.com/photo-${img1}?w=400&q=80`,
-                    `https://images.unsplash.com/photo-${img2}?w=400&q=80`,
-                    `https://images.unsplash.com/photo-${img3}?w=400&q=80`,
-                    `https://images.unsplash.com/photo-${img4}?w=400&q=80`
-                ],
-                aiSummary: {
-                    summary: `Solid ${catObj.name}.`,
-                    pros: ["Durable"],
-                    cons: ["Pricey"],
-                    verdict: "Recommended.",
-                    sentimentScore: 85
-                }
-            });
+                // Minimal payload to save database size but rich enough for UI testing
+                batch.push({
+                    name: `${adj} ${brand} ${catObj.name.substring(0,3)}#${currentId}`,
+                    description: `A fine ${brand} ${catObj.name}. Features elegant design.`,
+                    price: price,
+                    category: catObj.name,
+                    brand: brand,
+                    manufacturer: `${brand} Corporation`,
+                    stock: Math.floor(Math.random() * 200) + 10,
+                    rating: rating,
+                    numReviews: Math.floor(Math.random() * 500) + 5,
+                    images: [
+                        `https://images.unsplash.com/photo-${img1}?w=400&q=80`,
+                        `https://images.unsplash.com/photo-${img2}?w=400&q=80`,
+                        `https://images.unsplash.com/photo-${img3}?w=400&q=80`,
+                        `https://images.unsplash.com/photo-${img4}?w=400&q=80`
+                    ],
+                    aiSummary: {
+                        summary: `Solid ${catObj.name}.`,
+                        pros: ["Durable"],
+                        cons: ["Pricey"],
+                        verdict: "Recommended.",
+                        sentimentScore: 85
+                    }
+                });
+            }
+            await Product.insertMany(batch);
+            if ((i + batch.length) % 1000 === 0) {
+              console.log(`Progress: ${i + batch.length} items added...`);
+            }
+            // Longer delay to let Atlas rest
+            await new Promise(resolve => setTimeout(resolve, 500));
+        } catch (batchErr) {
+            console.error(`Error adding batch ${i}:`, batchErr.message);
+            // Wait longer on error and try to continue
+            await new Promise(resolve => setTimeout(resolve, 2000));
         }
-        await Product.insertMany(batch);
-        console.log(`Successfully added batch from ${i + 1} to ${i + batchSize}`);
     }
 
     const finalCount = await Product.countDocuments();
@@ -127,4 +143,3 @@ const seedData = async () => {
 };
 
 seedData();
-

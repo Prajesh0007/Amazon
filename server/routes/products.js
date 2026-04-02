@@ -66,7 +66,10 @@ router.post('/', protect, admin, async (req, res) => {
   const product = new Product({
     name: name || 'Sample Name',
     price: price || 0,
-    user: req.user._id,
+    seller: {
+      name: req.user.name,
+      id: req.user._id
+    },
     images: images || ['/images/sample.jpg'],
     brand: brand || 'Sample Brand',
     category: category || 'Sample Category',
