@@ -5,8 +5,8 @@ import useAuthStore from '../store/useAuthStore';
 import toast from 'react-hot-toast';
 
 const SellerDashboard = () => {
-  const { user } = useAuthStore();
-  const [isSeller, setIsSeller] = useState(user?.role === 'seller');
+  const { user, updateUser } = useAuthStore();
+  const isSeller = user?.role === 'seller';
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newProduct, setNewProduct] = useState({
@@ -23,7 +23,7 @@ const SellerDashboard = () => {
     if (isSeller) {
       fetchSellerProducts();
     }
-  }, [isSeller]);
+  }, [isSeller, user]);
 
   const handleRegisterSeller = async () => {
     try {
@@ -39,7 +39,6 @@ const SellerDashboard = () => {
       if (!res.ok) throw new Error(data.message || 'Registration failed');
       
       updateUser({ role: 'seller' });
-      setIsSeller(true);
       toast.success('Successfully registered as a Seller!');
     } catch (err) {
       toast.error(err.message);
