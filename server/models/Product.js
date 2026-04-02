@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   rating: { type: Number, default: 0 },
   numReviews: { type: Number, default: 0 },
+  manufacturer: { type: String, default: 'Unknown' },
   variants: [{
     type: { type: String }, // size, color
     value: { type: String }
@@ -27,5 +28,7 @@ const productSchema = new mongoose.Schema({
     sentimentScore: Number
   }
 }, { timestamps: true });
+
+productSchema.index({ name: 'text', category: 1, brand: 1 });
 
 module.exports = mongoose.model('Product', productSchema);

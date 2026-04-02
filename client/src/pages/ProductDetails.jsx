@@ -110,12 +110,20 @@ const ProductDetails = () => {
           {/* Right: Product Info */}
           <div className="lg:col-span-7 space-y-8">
             <div className="space-y-4">
-              <span className="text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full uppercase tracking-wider">
-                {product.brand} • {product.category}
-              </span>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full uppercase tracking-wider">
+                  {product.brand} • {product.category}
+                </span>
+                {product.manufacturer && (
+                  <span className="text-xs text-gray-500 font-medium">By {product.manufacturer}</span>
+                )}
+              </div>
               <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight dark:text-white">
                 {product.name}
               </h1>
+              <p className="text-sm font-medium text-[var(--accent)] hover:underline cursor-pointer">
+                Visit the {product.seller?.name || 'Amazon Clone'} Store
+              </p>
               
               <div className="flex items-center gap-4">
                 <div className="flex items-center bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full gap-2">

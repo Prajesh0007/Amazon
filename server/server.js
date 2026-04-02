@@ -11,6 +11,7 @@ const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const cartRoutes = require('./routes/cart');
 const aiRoutes = require('./routes/ai');
+const sellerRoutes = require('./routes/seller');
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/seller', sellerRoutes);
 
 // Root helper message
 app.get('/', (req, res) => {

@@ -64,9 +64,9 @@ const seedData = async () => {
       Grocery: ['1542838132-92c53300491e', '1506484334402-40ff1707d41a', '1588964895597-cfccd6e2dbf9']
     };
 
-    console.log('Generating 1,000 realistic items...');
-    const totalItems = 1000;
-    const batchSize = 100;
+    console.log('Generating 100,000 minimal items...');
+    const totalItems = 100000;
+    const batchSize = 1000; // larger batches for fast DB populating
 
     for (let i = 0; i < totalItems; i += batchSize) {
         const batch = [];
@@ -79,30 +79,36 @@ const seedData = async () => {
             const price = Math.floor(Math.random() * 80000) + 500;
             const rating = parseFloat((Math.random() * 1.5 + 3.5).toFixed(1));
 
-            // Select image from category-specific pool
+            // Pool images for multiple views
             const imgPool = categoryImages[catObj.name];
-            const imgId = imgPool[j % imgPool.length];
-            const img2Id = imgPool[(j + 1) % imgPool.length];
+            const img1 = imgPool[j % imgPool.length];
+            const img2 = imgPool[(j + 1) % imgPool.length];
+            const img3 = imgPool[(j + 2) % imgPool.length];
+            const img4 = imgPool[(j + 3) % imgPool.length];
 
+            // Minimal payload to save database size but rich enough for UI testing
             batch.push({
-                name: `${adj} ${brand} ${catObj.name} Item #${currentId}`,
-                description: `Experience the future of ${catObj.name.toLowerCase()} with the ${adj} series from ${brand}. \n\nKey Features:\n- Industry-leading ${catObj.name.toLowerCase()} technology\n- Premium build quality using sustainable materials\n- Ergonomic design for maximum comfort\n- Seamless integration with all your favorite smart home systems.\n\nOptimized for professional workloads and casual everyday use alike.`,
+                name: `${adj} ${brand} ${catObj.name.substring(0,3)}#${currentId}`,
+                description: `A fine ${brand} ${catObj.name}. Features elegant design.`,
                 price: price,
                 category: catObj.name,
                 brand: brand,
+                manufacturer: `${brand} Corporation`,
                 stock: Math.floor(Math.random() * 200) + 10,
                 rating: rating,
-                numReviews: Math.floor(Math.random() * 5000) + 50,
+                numReviews: Math.floor(Math.random() * 500) + 5,
                 images: [
-                    `https://images.unsplash.com/photo-${imgId}?w=800&q=80`,
-                    `https://images.unsplash.com/photo-${img2Id}?w=800&q=80`
+                    `https://images.unsplash.com/photo-${img1}?w=400&q=80`,
+                    `https://images.unsplash.com/photo-${img2}?w=400&q=80`,
+                    `https://images.unsplash.com/photo-${img3}?w=400&q=80`,
+                    `https://images.unsplash.com/photo-${img4}?w=400&q=80`
                 ],
                 aiSummary: {
-                    summary: `The ${adj} ${catObj.name} by ${brand} is a standout performer in its class, offering high-fidelity performance balanced with sleek modern aesthetics.`,
-                    pros: ["World-class build quality", "Easy setup process", "Top-tier durability", "Excellent resale value"],
-                    cons: ["Premium price point", "Large footprint", "Learning curve for advanced features"],
-                    verdict: rating > 4.5 ? "An absolute must-buy for enthusiasts." : "A solid choice for most users, offering great value for money.",
-                    sentimentScore: Math.floor(Math.random() * 20) + 75
+                    summary: `Solid ${catObj.name}.`,
+                    pros: ["Durable"],
+                    cons: ["Pricey"],
+                    verdict: "Recommended.",
+                    sentimentScore: 85
                 }
             });
         }

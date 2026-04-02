@@ -9,6 +9,7 @@ import Auth from './pages/Auth';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Admin from './pages/Admin';
+import SellerDashboard from './pages/SellerDashboard';
 import ShopBotChat from './components/ShopBotChat';
 import useAuthStore from './store/useAuthStore';
 
@@ -69,6 +70,15 @@ function App() {
             element={
               <ProtectedRoute adminOnly={true}>
                 <Admin />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="seller" 
+            element={
+              <ProtectedRoute>
+                <SellerDashboard />
               </ProtectedRoute>
             } 
           />

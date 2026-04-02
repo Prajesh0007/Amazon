@@ -133,7 +133,7 @@ const Home = () => {
             { icon: <Truck />, label: 'Prime Delivery', sub: 'In as little as 2 hours' },
             { icon: <Shield />, label: 'Guaranteed', sub: 'Elite Buyer Protection' },
             { icon: <Zap />, label: 'Smart Filtering', sub: 'AI Search Enabled' },
-            { icon: <Sparkles />, label: '10K+ Items', sub: 'Expanding Daily' },
+            { icon: <Sparkles />, label: '100K+ Items', sub: 'Expanding Daily' },
           ].map((f, i) => (
             <div key={i} className="flex flex-col items-center text-center gap-1 group cursor-default">
               <div className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-[var(--secondary)] group-hover:bg-[var(--secondary)] group-hover:text-[var(--primary)] transition-all transform rotate-3 group-hover:rotate-0">
