@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Zap, Shield, Truck, Sparkles, Laptop, Gamepad, Headphones, Smartphone, Home as HomeIcon, Watch, BookOpen, Baby, Dumbbell, ShoppingBag } from 'lucide-react';
 import useProductStore from '../store/useProductStore';
