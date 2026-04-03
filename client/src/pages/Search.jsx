@@ -42,8 +42,8 @@ const Search = () => {
     fetchProducts(params);
   }, [query, categoryParam, maxPrice, selectedBrand, sortBy, fetchProducts]);
 
-  const categories = ['All', 'Electronics', 'Computing', 'Audio', 'Mobile', 'Home', 'Fashion', 'Toys', 'Sports', 'Grocery', 'Books'];
-  const brands = ['Sony', 'Apple', 'Samsung', 'Logitech', 'Dell', 'HP', 'Nike', 'Adidas', 'Lego'];
+  const categories = ['All', 'Electronics', 'Computing', 'Audio', 'Mobile', 'Home', 'Fashion', 'Toys', 'Sports', 'Grocery', 'Books', 'Automotive', 'Beauty', 'Health', 'Industrial', 'Software', 'Pharmacy', 'Pets', 'Garden', 'Music', 'Office'];
+  const brands = ['Sony', 'Apple', 'Samsung', 'Logitech', 'Dell', 'HP', 'Nike', 'Adidas', 'Lego', 'Tesla', 'Bosch', 'L\'Oreal', 'Adobe', 'Pfizer', 'Herman Miller', 'Fender'];
 
   const handleCategoryChange = (cat) => {
     setSearchParams({ q: query, category: cat });

@@ -26,6 +26,22 @@ const productSchema = new mongoose.Schema({
     cons: [String],
     verdict: String,
     sentimentScore: Number
+  },
+  specifications: {
+    type: Map,
+    of: String
+  },
+  isPrime: { type: Boolean, default: true },
+  serviceType: { 
+    type: String, 
+    enum: ['Shopping', 'Food', 'Grocery', 'Pharmacy'], 
+    default: 'Shopping' 
+  },
+  isVeg: { type: Boolean },
+  timeToDeliver: { type: String, default: '2-4 Days' },
+  business: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Business'
   }
 }, { timestamps: true });
 

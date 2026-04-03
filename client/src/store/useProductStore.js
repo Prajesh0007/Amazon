@@ -13,18 +13,19 @@ const useProductStore = create((set, get) => ({
 
   fetchProducts: async (params = {}) => {
     set({ loading: true, error: null });
-    const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '' } = params;
+    const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '', serviceType = 'All' } = params;
     
     try {
       const { apiUrl } = get();
-      const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`;
+      const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}&serviceType=${serviceType}`;
       const { data } = await axios.get(url);
       
       set({ 
-        products: pageNumber === 1 ? data.products : undefined, // Handled by page reset logic elsewhere if needed
+        products: pageNumber === 1 ? data.products : undefined,
         pages: data.pages, 
         page: data.page, 
         total: data.total,
+        activeService: serviceType,
         loading: false 
       });
       
@@ -40,10 +41,10 @@ const useProductStore = create((set, get) => ({
   },
 
   fetchMoreProducts: async (params = {}) => {
-    const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '' } = params;
+    const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '', serviceType = 'All' } = params;
     try {
       const { apiUrl } = get();
-      const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`;
+      const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}&serviceType=${serviceType}`;
       const { data } = await axios.get(url);
       
       set((state) => ({ 

@@ -28,6 +28,10 @@ const Navbar = () => {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    localStorage.setItem('isPrime', isPrime);
+  }, [isPrime]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -38,12 +42,17 @@ const Navbar = () => {
 
   const navItems = [
     ...(user?.role === 'admin' ? [{ title: 'Admin Dashboard', path: '/admin' }] : []),
+    { title: 'Prime Video', path: '/prime' },
     { title: 'Best Sellers', path: '/search?category=Best%20Sellers' },
-    { title: 'Deals', path: '/search?category=Deals' },
     { title: 'Electronics', path: '/search?category=Electronics' },
-    { title: 'Home & Kitchen', path: '/search?category=Home' },
+    { title: 'Computing', path: '/search?category=Computing' },
+    { title: 'Mobile', path: '/search?category=Mobile' },
+    { title: 'Home', path: '/search?category=Home' },
     { title: 'Fashion', path: '/search?category=Fashion' },
-    { title: 'Sell', path: '/seller' },
+    { title: 'Automotive', path: '/search?category=Automotive' },
+    { title: 'Beauty', path: '/search?category=Beauty' },
+    { title: 'Software', path: '/search?category=Software' },
+    { title: 'Music', path: '/search?category=Music' },
   ];
 
   return (
@@ -92,6 +101,19 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="flex items-center gap-6 text-white text-sm font-medium">
+            {/* Prime Toggle */}
+            <button 
+              onClick={() => setIsPrime(!isPrime)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-500 border ${
+                isPrime 
+                ? 'bg-amber-400/10 border-amber-400/50 text-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]' 
+                : 'bg-white/5 border-white/10 text-white/50 hover:border-white/30'
+              }`}
+            >
+              <div className={`w-2 h-2 rounded-full ${isPrime ? 'bg-amber-400 animate-pulse' : 'bg-white/20'}`} />
+              <span className="text-[10px] font-black uppercase tracking-tighter">Prime</span>
+            </button>
+
             {/* Theme Toggle */}
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
@@ -109,6 +131,7 @@ const Navbar = () => {
               {user && (
                 <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-xl border border-gray-100 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2">
                   <Link to="/orders" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">My Orders</Link>
+                  <Link to="/wishlist" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 font-bold text-red-500">My Wishlist / Collections</Link>
                   <Link to="/profile" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Account Settings</Link>
                   <Link to="/seller" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 font-bold text-[var(--accent)]">Seller Hub / Sell</Link>
                   <button 

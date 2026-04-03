@@ -9,12 +9,13 @@ import BuyAgain from '../components/BuyAgain';
 import RecentlyViewed from '../components/RecentlyViewed';
 
 const Home = () => {
-  const { products, loading, fetchProducts, fetchMoreProducts, page, pages, total } = useProductStore();
+  const { products, loading, fetchProducts, fetchMoreProducts, page, pages, total, activeService } = useProductStore();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [serviceType, setServiceType] = useState('Shopping');
 
   const fetchInitialProducts = useCallback(() => {
-    fetchProducts({ category: selectedCategory, pageNumber: 1 });
-  }, [fetchProducts, selectedCategory]);
+    fetchProducts({ category: selectedCategory, pageNumber: 1, serviceType });
+  }, [fetchProducts, selectedCategory, serviceType]);
 
   useEffect(() => {
     fetchInitialProducts();
@@ -22,9 +23,16 @@ const Home = () => {
 
   const handleLoadMore = () => {
     if (page < pages) {
-      fetchMoreProducts({ category: selectedCategory, pageNumber: page + 1 });
+      fetchMoreProducts({ category: selectedCategory, pageNumber: page + 1, serviceType });
     }
   };
+
+  const services = [
+    { id: 'Shopping', name: 'Elite Shop', icon: <ShoppingBag size={24} />, color: 'blue', desc: 'Amazon/Flipkart' },
+    { id: 'Food', name: 'Instant Food', icon: <Zap size={24} />, color: 'orange', desc: 'Swiggy/Zomato' },
+    { id: 'Grocery', name: 'Wait-Less', icon: <Truck size={24} />, color: 'green', desc: 'Zepto/Blinkit' },
+    { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={24} />, color: 'red', desc: 'Apollo/1mg' },
+  ];
 
   const categories = [
     { name: 'All', icon: <Sparkles size={18} /> },
@@ -41,67 +49,94 @@ const Home = () => {
   ];
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-32">
+    <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-32 transition-colors duration-700">
+      {/* Super App Service Hub */}
+      <div className="max-w-7xl mx-auto pt-16 px-6 grid grid-cols-2 md:grid-cols-4 gap-4 pb-12">
+        {services.map((s) => (
+          <motion.button
+            key={s.id}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setServiceType(s.id)}
+            className={`relative overflow-hidden group p-6 rounded-[2.5rem] border-2 transition-all duration-500 ${
+              serviceType === s.id 
+              ? `bg-${s.color}-500/10 border-${s.color}-500 shadow-2xl shadow-${s.color}-500/20` 
+              : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800'
+            }`}
+          >
+            <div className={`w-12 h-12 rounded-2xl mb-4 flex items-center justify-center transition-all ${
+              serviceType === s.id ? `bg-${s.color}-500 text-white` : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
+            }`}>
+              {s.icon}
+            </div>
+            <h3 className={`text-lg font-black uppercase tracking-tighter ${serviceType === s.id ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
+              {s.name}
+            </h3>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.desc}</p>
+          </motion.button>
+        ))}
+      </div>
+
       {/* Hero Section */}
-      <div className="relative h-[650px] overflow-hidden bg-slate-900 group">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/40 to-slate-950 z-10" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-50 dark:from-slate-950 to-transparent z-15" />
-        
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="max-w-5xl px-8 text-center z-20 space-y-8">
+      <div className="relative h-[450px] mx-6 rounded-[3rem] overflow-hidden bg-slate-900 group shadow-3xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 flex items-center px-16 z-20">
+          <div className="max-w-2xl space-y-6">
              <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-4 shadow-2xl"
+              layoutId="badge"
+              className={`inline-flex items-center gap-2 px-5 py-2 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-4`}
              >
-                <div className="w-2 h-2 bg-amber-500 rounded-full animate-ping" />
-                <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.5em] font-heading">The New Standard of Luxury</span>
+                <div className={`w-2 h-2 rounded-full animate-ping ${serviceType === 'Food' ? 'bg-orange-500' : 'bg-amber-500'}`} />
+                <span className="text-[10px] font-black text-white uppercase tracking-[0.5em]">
+                  {serviceType === 'Food' ? 'Express Delivery' : 'Premium Selection'}
+                </span>
              </motion.div>
-             
              <motion.h1 
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-7xl md:text-9xl font-black text-white tracking-tighter leading-[0.8] uppercase font-display"
+               layoutId="title"
+               className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.8] uppercase"
              >
-               ELEVATE <br /> 
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-500 to-orange-600 drop-shadow-[0_0_30px_rgba(245,158,11,0.3)]">
-                EVERYDAY
-               </span>
+               {serviceType === 'Shopping' && <>MODERN <br /><span className="text-blue-500">UTILITY</span></>}
+               {serviceType === 'Food' && <>CRAVE <br /><span className="text-orange-500">INSTANT</span></>}
+               {serviceType === 'Grocery' && <>DAILY <br /><span className="text-green-500">FRESH</span></>}
+               {serviceType === 'Pharmacy' && <>CARE <br /><span className="text-red-500">VITAL</span></>}
              </motion.h1>
-             
-             <motion.p 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-medium leading-relaxed opacity-60 font-body"
-             >
-               Curated collections of world-class technology and lifestyle essentials. 
-               Experience the future of commerce today.
-             </motion.p>
           </div>
         </div>
-
         <motion.img 
-          initial={{ scale: 1.2, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.4 }}
-          transition={{ duration: 2 }}
-          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80" 
-          alt="Hero" 
-          className="absolute inset-0 w-full h-full object-cover mix-blend-lighten grayscale hover:grayscale-0 transition-all duration-1000"
+          key={serviceType}
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.6 }}
+          src={
+            serviceType === 'Shopping' ? "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80" :
+            serviceType === 'Food' ? "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600&q=80" :
+            "https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80"
+          } 
+          className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"
         />
       </div>
 
-      <div className="max-w-7xl mx-auto -mt-24 relative z-30 px-6 space-y-16">
+      <div className="max-w-7xl mx-auto mt-16 relative z-30 px-6 space-y-16">
         
-        {/* Flash Sale Component */}
-        <FlashSale />
-
-        {/* New Home Sections */}
-        <div className="space-y-16 py-4">
-            <BuyAgain />
-            <RecentlyViewed />
+        {/* Quick Hub Access */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link to="/orders" className="p-8 bg-black dark:bg-white text-white dark:text-black rounded-[2.5rem] flex items-center justify-between group shadow-2xl">
+            <div className="space-y-1">
+              <h4 className="text-2xl font-black uppercase tracking-tight">Consumer Dashboard</h4>
+              <p className="text-xs opacity-60 font-medium uppercase tracking-widest">Track all 4 service orders</p>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-black/10 flex items-center justify-center group-hover:translate-x-2 transition-transform">
+              <ChevronRight size={24} />
+            </div>
+          </Link>
+          <Link to="/seller" className="p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] flex items-center justify-between group shadow-sm">
+            <div className="space-y-1">
+              <h4 className="text-2xl font-black uppercase tracking-tight">Seller Hub</h4>
+              <p className="text-xs opacity-60 font-medium uppercase tracking-widest">Manage Restaurant / Store / Shop</p>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:translate-x-2 transition-transform">
+              <ChevronRight size={24} />
+            </div>
+          </Link>
         </div>
 
         {/* Category Pills */}
@@ -109,39 +144,16 @@ const Home = () => {
           {categories.map((cat, i) => (
             <motion.button
               key={cat.name}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.05 }}
               onClick={() => setSelectedCategory(cat.name)}
               className={`flex items-center gap-3 px-6 py-4 rounded-[1.5rem] border font-black text-xs uppercase tracking-widest transition-all duration-500 ${
                 selectedCategory === cat.name 
-                ? 'bg-amber-500 border-amber-500 text-slate-900 shadow-[0_20px_40px_-10px_rgba(245,158,11,0.4)] scale-110 z-10' 
-                : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-100 dark:border-slate-800 text-slate-500 hover:border-amber-500/50 shadow-sm'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl scale-110 z-10' 
+                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500'
               }`}
             >
-              <div className={selectedCategory === cat.name ? 'text-slate-900' : 'text-amber-500'}>
-                {cat.icon}
-              </div>
+              {cat.icon}
               {cat.name}
             </motion.button>
-          ))}
-        </div>
-
-        {/* Feature Highlights */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-8 px-10 bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-xl shadow-gray-200/20 dark:shadow-none">
-          {[
-            { icon: <Truck />, label: 'Prime Delivery', sub: 'In as little as 2 hours' },
-            { icon: <Shield />, label: 'Guaranteed', sub: 'Elite Buyer Protection' },
-            { icon: <Zap />, label: 'Smart Filtering', sub: 'AI Search Enabled' },
-            { icon: <Sparkles />, label: '100K+ Items', sub: 'Expanding Daily' },
-          ].map((f, i) => (
-            <div key={i} className="flex flex-col items-center text-center gap-1 group cursor-default">
-              <div className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-[var(--secondary)] group-hover:bg-[var(--secondary)] group-hover:text-[var(--primary)] transition-all transform rotate-3 group-hover:rotate-0">
-                {f.icon}
-              </div>
-              <span className="text-[11px] font-black uppercase tracking-tight mt-2">{f.label}</span>
-              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">{f.sub}</span>
-            </div>
           ))}
         </div>
 
@@ -150,14 +162,11 @@ const Home = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-100 dark:border-gray-800 pb-10">
             <div className="space-y-1 text-center md:text-left">
               <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">
-                {selectedCategory === 'All' ? 'Trending Catalog' : `${selectedCategory}`}
+                {serviceType} <span className="text-slate-400">Essentials</span>
               </h2>
-              <div className="flex items-center justify-center md:justify-start gap-2">
-                 <span className="w-8 h-[2px] bg-[var(--secondary)] inline-block" />
-                 <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">
-                  Total {total || 0} Assets Found
-                 </p>
-              </div>
+              <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">
+                Found {total || 0} Assets optimized for {serviceType}
+              </p>
             </div>
           </div>
           
@@ -176,17 +185,14 @@ const Home = () => {
                 {/* Pagination / Load More */}
                 {page < pages && (
                   <div className="mt-20 flex flex-col items-center gap-6">
-                     <p className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
-                       Viewing {products.length} of {total} products
-                     </p>
                      <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleLoadMore}
                       disabled={loading}
-                      className="px-12 py-5 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl disabled:opacity-50 transition-all hover:shadow-[var(--secondary)]/20"
+                      className="px-12 py-5 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl disabled:opacity-50"
                      >
-                        {loading ? 'Powering Up...' : 'Load Elite Items'}
+                        {loading ? 'Processing...' : 'Load More Items'}
                      </motion.button>
                   </div>
                 )}

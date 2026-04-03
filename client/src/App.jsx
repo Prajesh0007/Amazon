@@ -10,6 +10,8 @@ import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Admin from './pages/Admin';
 import SellerDashboard from './pages/SellerDashboard';
+import Wishlist from './pages/Wishlist';
+import ConsumerHub from './pages/ConsumerHub';
 import ShopBotChat from './components/ShopBotChat';
 import useAuthStore from './store/useAuthStore';
 
@@ -46,6 +48,8 @@ function App() {
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="search" element={<Search />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="wishlist" element={<Wishlist />} />
+          <Route path="consumer-hub" element={<ConsumerHub />} />
           
           <Route 
             path="checkout" 

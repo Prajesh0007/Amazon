@@ -9,9 +9,13 @@ router.get('/', async (req, res) => {
   const pageSize = 12;
   const page = Number(req.query.page) || 1;
 
-  const { keyword, category, brand, minPrice, maxPrice, sort } = req.query;
+  const { keyword, category, brand, minPrice, maxPrice, sort, serviceType } = req.query;
 
   const query = {};
+
+  if (serviceType && serviceType !== 'All') {
+    query.serviceType = serviceType;
+  }
 
   if (keyword) {
     query.name = { $regex: keyword, $options: 'i' };

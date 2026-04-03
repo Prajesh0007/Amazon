@@ -45,11 +45,27 @@ const ProductDetails = () => {
   };
 
   const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast.success(isWishlisted ? "Removed from Wishlist" : "Added to Wishlist", {
-        icon: <Heart size={20} className={isWishlisted ? "text-gray-400" : "text-red-500 fill-current"} />,
-    });
+    const stored = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const isPresent = stored.some(p => p._id === id);
+    
+    let updated;
+    if (isPresent) {
+      updated = stored.filter(p => p._id !== id);
+      setIsWishlisted(false);
+      toast.success("Removed from Wishlist");
+    } else {
+      updated = [...stored, { ...product, collection: 'General' }];
+      setIsWishlisted(true);
+      toast.success("Added to Wishlist");
+    }
+    
+    localStorage.setItem('wishlist', JSON.stringify(updated));
   };
+  
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    setIsWishlisted(stored.some(p => p._id === id));
+  }, [id]);
 
   if (loading || !product) {
     return (
@@ -125,18 +141,36 @@ const ProductDetails = () => {
                 Visit the {product.seller?.name || 'Amazon Clone'} Store
               </p>
               
-              <div className="flex items-center gap-4">
-                <div className="flex items-center bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full gap-2">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full gap-2 transition-all hover:bg-gray-200 dark:hover:bg-gray-700 cursor-default">
                   <div className="flex">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={16} className={`${i < Math.floor(product.rating) ? 'fill-[var(--accent)] text-[var(--accent)]' : 'text-gray-300'}`} />
+                      <Star key={i} size={16} className={`${i < Math.floor(product.rating) ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
                     ))}
                   </div>
                   <span className="text-sm font-bold">{product.rating}</span>
                 </div>
                 <span className="text-sm text-gray-500 font-medium">{product.numReviews} Global Ratings</span>
+                
+                {product.isPrime && (
+                  <div className="flex items-center gap-1 bg-blue-600 text-white px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-blue-600/20">
+                    <Check size={10} strokeWidth={4} /> Prime
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* Product Specifications Section */}
+            {product.specifications && Object.keys(product.specifications).length > 0 && (
+              <div className="grid grid-cols-2 gap-4 py-4 border-y border-gray-100 dark:border-gray-800">
+                {Object.entries(product.specifications).map(([key, value]) => (
+                  <div key={key} className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{key}</span>
+                    <span className="text-sm font-bold dark:text-white">{value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* AI Summary Highlight */}
             {product.aiSummary && (

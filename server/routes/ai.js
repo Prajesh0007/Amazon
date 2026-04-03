@@ -135,9 +135,12 @@ router.post('/compare', async (req, res) => {
 
   const prompt = `Compare these two products in detail:
   Product A: ${productA.name} - ${productA.description} (Price: ₹${productA.price})
-  Product B: ${productB.name} - ${productB.description} (Price: ₹${productB.price})
+  Specs A: ${JSON.stringify(productA.specifications || {})}
   
-  Provide a comparison across 3-5 key features.
+  Product B: ${productB.name} - ${productB.description} (Price: ₹${productB.price})
+  Specs B: ${JSON.stringify(productB.specifications || {})}
+
+  Provide a comparison across 4-6 key features, specifically highlighting technical differences from the specs.
   Return ONLY JSON: 
   {
     "comparisons": [
