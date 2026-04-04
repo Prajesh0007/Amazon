@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Zap, Shield, Truck, Sparkles, Laptop, Gamepad, Headphones, Smartphone, Home as HomeIcon, Watch, BookOpen, Baby, Dumbbell, ShoppingBag } from 'lucide-react';
+import { ChevronRight, Zap, Shield, Truck, Sparkles, Laptop, Gamepad, Headphones, Smartphone, Home as HomeIcon, Watch, BookOpen, Baby, Dumbbell, ShoppingBag, Car, Wrench } from 'lucide-react';
 import useProductStore from '../store/useProductStore';
 import ProductGrid from '../components/ProductGrid';
 import SkeletonLoader from '../components/SkeletonLoader';
@@ -35,7 +35,7 @@ const Home = () => {
     { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={24} />, color: 'red', desc: 'Apollo/1mg', path: '/health-hub' },
     { id: 'Stay', name: 'Stay Hub', icon: <HomeIcon size={24} />, color: 'purple', desc: 'Airbnb/Hotels', path: '/stay-hub' },
     { id: 'Ride', name: 'Ride Hub', icon: <Car size={24} />, color: 'indigo', desc: 'Uber/Ola', path: '/ride-hub' },
-    { id: 'Genius', name: 'Genius Hub', icon: <Tool size={24} />, color: 'amber', desc: 'Urban Company', path: '/genius-hub' },
+    { id: 'Genius', name: 'Genius Hub', icon: <Wrench size={24} />, color: 'amber', desc: 'Urban Company', path: '/genius-hub' },
   ];
 
   const categories = [

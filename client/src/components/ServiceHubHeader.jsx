@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Zap, Truck, Shield, Home, Car, Tool, ChevronRight } from 'lucide-react';
+import { ShoppingBag, Zap, Truck, Shield, Home, Car, Wrench, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ServiceHubHeader = () => {
@@ -12,7 +12,7 @@ const ServiceHubHeader = () => {
     { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={20} />, color: 'red', path: '/health-hub' },
     { id: 'Stay', name: 'Stay Hub', icon: <Home size={20} />, color: 'purple', path: '/stay-hub' },
     { id: 'Ride', name: 'Ride Hub', icon: <Car size={20} />, color: 'indigo', path: '/ride-hub' },
-    { id: 'Genius', name: 'Genius Hub', icon: <Tool size={20} />, color: 'amber', path: '/genius-hub' },
+    { id: 'Genius', name: 'Genius Hub', icon: <Wrench size={20} />, color: 'amber', path: '/genius-hub' },
   ];
 
   return (

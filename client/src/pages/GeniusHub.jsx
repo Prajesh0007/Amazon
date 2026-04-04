@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Tool, Shield, Search, Star, Clock, Heart, ChevronRight, User, Phone, CheckCircle2 } from 'lucide-react';
+import { Wrench, Shield, Search, Star, Clock, Heart, ChevronRight, User, Phone, CheckCircle2 } from 'lucide-react';
 import useProductStore from '../store/useProductStore';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ const GeniusHub = () => {
                         animate={{ rotate: 0, scale: 1 }}
                         className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center text-amber-600"
                     >
-                        <Tool size={32} />
+                        <Wrench size={32} />
                     </motion.div>
                     <div className="space-y-1">
                         <h1 className="text-4xl font-black uppercase tracking-tighter dark:text-white">Genius <span className="text-amber-500">Hub</span></h1>
