@@ -111,4 +111,66 @@ router.put('/:id', protect, admin, async (req, res) => {
   }
 });
 
+const Review = require('../models/Review');
+const Question = require('../models/Question');
+
+// ... existing routes ...
+
+// @desc    Get reviews for a product
+// @route   GET /api/products/:id/reviews
+router.get('/:id/reviews', async (req, res) => {
+  const reviews = await Review.find({ product: req.params.id }).sort({ createdAt: -1 });
+  res.json(reviews);
+});
+
+// @desc    Create a review
+// @route   POST /api/products/:id/reviews
+router.post('/:id/reviews', protect, async (req, res) => {
+  const { rating, comment } = req.body;
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const review = new Review({
+      product: req.params.id,
+      user: req.user._id,
+      name: req.user.name,
+      rating: Number(rating),
+      comment
+    });
+
+    await review.save();
+    
+    // Update product rating
+    const reviews = await Review.find({ product: req.params.id });
+    product.numReviews = reviews.length;
+    product.rating = reviews.reduce((acc, item) => item.rating + acc, 0) / reviews.length;
+    
+    await product.save();
+    res.status(201).json({ message: 'Review added' });
+  } else {
+    res.status(404).json({ message: 'Product not found' });
+  }
+});
+
+// @desc    Get questions for a product
+// @route   GET /api/products/:id/questions
+router.get('/:id/questions', async (req, res) => {
+  const questions = await Question.find({ product: req.params.id }).sort({ createdAt: -1 });
+  res.json(questions);
+});
+
+// @desc    Create a question
+// @route   POST /api/products/:id/questions
+router.post('/:id/questions', protect, async (req, res) => {
+  const { question } = req.body;
+  const q = new Question({
+    product: req.params.id,
+    user: req.user._id,
+    question
+  });
+
+  await q.save();
+  res.status(201).json(q);
+});
+
 module.exports = router;

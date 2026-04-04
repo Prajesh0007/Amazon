@@ -29,10 +29,10 @@ const Home = () => {
   };
 
   const services = [
-    { id: 'Shopping', name: 'Elite Shop', icon: <ShoppingBag size={24} />, color: 'blue', desc: 'Amazon/Flipkart' },
-    { id: 'Food', name: 'Instant Food', icon: <Zap size={24} />, color: 'orange', desc: 'Swiggy/Zomato' },
-    { id: 'Grocery', name: 'Wait-Less', icon: <Truck size={24} />, color: 'green', desc: 'Zepto/Blinkit' },
-    { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={24} />, color: 'red', desc: 'Apollo/1mg' },
+    { id: 'Shopping', name: 'Elite Shop', icon: <ShoppingBag size={24} />, color: 'blue', desc: 'Amazon/Flipkart', path: '/' },
+    { id: 'Food', name: 'Instant Food', icon: <Zap size={24} />, color: 'orange', desc: 'Swiggy/Zomato', path: '/food-hub' },
+    { id: 'Grocery', name: 'Wait-Less', icon: <Truck size={24} />, color: 'green', desc: 'Zepto/Blinkit', path: '/grocery-hub' },
+    { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={24} />, color: 'red', desc: 'Apollo/1mg', path: '/health-hub' },
   ];
 
   const categories = [
@@ -54,12 +54,11 @@ const Home = () => {
       {/* Super App Service Hub */}
       <div className="max-w-7xl mx-auto pt-16 px-6 grid grid-cols-2 md:grid-cols-4 gap-4 pb-12">
         {services.map((s) => (
-          <motion.button
+          <Link
             key={s.id}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setServiceType(s.id)}
-            className={`relative overflow-hidden group p-6 rounded-[2.5rem] border-2 transition-all duration-500 ${
+            to={s.path}
+            onClick={() => s.id === 'Shopping' && setServiceType('Shopping')}
+            className={`relative overflow-hidden group p-6 rounded-[2.5rem] border-2 transition-all duration-500 hover:scale-105 active:scale-95 block ${
               serviceType === s.id 
               ? `bg-${s.color}-500/10 border-${s.color}-500 shadow-2xl shadow-${s.color}-500/20` 
               : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800'
@@ -74,7 +73,7 @@ const Home = () => {
               {s.name}
             </h3>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.desc}</p>
-          </motion.button>
+          </Link>
         ))}
       </div>
 

@@ -12,6 +12,9 @@ import Admin from './pages/Admin';
 import SellerDashboard from './pages/SellerDashboard';
 import Wishlist from './pages/Wishlist';
 import ConsumerHub from './pages/ConsumerHub';
+import FoodHub from './pages/FoodHub';
+import GroceryHub from './pages/GroceryHub';
+import HealthHub from './pages/HealthHub';
 import ShopBotChat from './components/ShopBotChat';
 import useAuthStore from './store/useAuthStore';
 
@@ -50,6 +53,9 @@ function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="consumer-hub" element={<ConsumerHub />} />
+          <Route path="food-hub" element={<FoodHub />} />
+          <Route path="grocery-hub" element={<GroceryHub />} />
+          <Route path="health-hub" element={<HealthHub />} />
           
           <Route 
             path="checkout" 

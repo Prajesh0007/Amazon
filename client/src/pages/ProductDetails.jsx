@@ -7,12 +7,15 @@ import useCartStore from '../store/useCartStore';
 import RatingBreakdown from '../components/RatingBreakdown';
 import RelatedProducts from '../components/RelatedProducts';
 import AICompare from '../components/AICompare';
+import ReviewList from '../components/ReviewList';
+import QuestionSection from '../components/QuestionSection';
+import AIReviewSummarizer from '../components/AIReviewSummarizer';
 import toast from 'react-hot-toast';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { product, loading, fetchProductById } = useProductStore();
+  const { product, reviews, questions, loading, fetchProductById } = useProductStore();
   const { addToCart } = useCartStore();
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
@@ -297,16 +300,30 @@ const ProductDetails = () => {
 
         {/* New Detailed Sections */}
         <div className="mt-20 grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-4 lowercase">
+            <div className="lg:col-span-4 space-y-8">
                 <RatingBreakdown rating={product.rating} numReviews={product.numReviews} />
+                
+                {/* Service Specific Info */}
+                {product.serviceType === 'Food' && (
+                  <div className="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-3xl border border-orange-100 dark:border-orange-800">
+                    <h4 className="text-sm font-black uppercase text-orange-600 mb-2">Restaurant Details</h4>
+                    <p className="text-xs font-bold dark:text-white mb-1">Delivered fresh from {product.brand || 'Local Kitchen'}</p>
+                    <p className="text-[10px] text-gray-500 font-bold tracking-widest">FOOD HUB VERIFIED</p>
+                  </div>
+                )}
+                {product.serviceType === 'Pharmacy' && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-3xl border border-blue-100 dark:border-blue-800">
+                    <h4 className="text-sm font-black uppercase text-blue-600 mb-2">Health Hub Info</h4>
+                    <p className="text-xs font-bold dark:text-white mb-1">Manufacturer: {product.manufacturer || 'Certified Pharma'}</p>
+                    <p className="text-[10px] text-red-500 font-black tracking-widest">CONSULT DOCTOR BEFORE USE</p>
+                  </div>
+                )}
             </div>
-            <div className="lg:col-span-8">
-                <div className="glass-card bg-white dark:bg-gray-900 rounded-3xl p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
-                    <h3 className="font-bold text-xl mb-6 dark:text-white">Customer Video Reviews</h3>
-                    <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center text-gray-400">
-                        <p className="text-sm font-medium italic">"The display is absolutely stunning, and battery life exceeded my expectations..."</p>
-                    </div>
-                </div>
+
+            <div className="lg:col-span-8 space-y-12">
+                <AIReviewSummarizer reviews={reviews} />
+                <QuestionSection questions={questions} />
+                <ReviewList reviews={reviews} />
             </div>
         </div>
 

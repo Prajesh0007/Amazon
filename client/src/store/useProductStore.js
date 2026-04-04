@@ -64,11 +64,61 @@ const useProductStore = create((set, get) => ({
       const { apiUrl } = get();
       const { data } = await axios.get(`${apiUrl}/products/${id}`);
       set({ product: data, loading: false });
+      
+      // Fetch reviews and questions in parallel
+      get().fetchProductReviews(id);
+      get().fetchProductQuestions(id);
     } catch (error) {
       set({ 
         error: error.response?.data?.message || 'Error fetching product', 
         loading: false 
       });
+    }
+  },
+
+  fetchProductReviews: async (id) => {
+    try {
+      const { apiUrl } = get();
+      const { data } = await axios.get(`${apiUrl}/products/${id}/reviews`);
+      set({ reviews: data });
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  },
+
+  fetchProductQuestions: async (id) => {
+    try {
+      const { apiUrl } = get();
+      const { data } = await axios.get(`${apiUrl}/products/${id}/questions`);
+      set({ questions: data });
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  },
+
+  createReview: async (id, reviewData, token) => {
+     try {
+       const { apiUrl } = get();
+       await axios.post(`${apiUrl}/products/${id}/reviews`, reviewData, {
+         headers: { Authorization: `Bearer ${token}` }
+       });
+       get().fetchProductReviews(id);
+       return true;
+     } catch (error) {
+       return false;
+     }
+  },
+
+  createQuestion: async (id, questionData, token) => {
+    try {
+      const { apiUrl } = get();
+      await axios.post(`${apiUrl}/products/${id}/questions`, questionData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      get().fetchProductQuestions(id);
+      return true;
+    } catch (error) {
+      return false;
     }
   },
 
