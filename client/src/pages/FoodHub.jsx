@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import { Utensils, Star, Clock, MapPin, Search, ChevronRight, Zap, Filter } from 'lucide-react';
 import useProductStore from '../store/useProductStore';
 import { Link } from 'react-router-dom';

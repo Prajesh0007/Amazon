@@ -60,7 +60,7 @@ const Home = () => {
           <Link
             key={s.id}
             to={s.path}
-            onClick={() => s.id === 'Shopping' && setServiceType('Shopping')}
+            onClick={() => setServiceType(s.id)}
             className={`relative overflow-hidden group p-6 rounded-[2.5rem] border-2 transition-all duration-500 hover:scale-105 active:scale-95 block ${
               serviceType === s.id 
               ? `bg-${s.color}-500/10 border-${s.color}-500 shadow-2xl shadow-${s.color}-500/20` 

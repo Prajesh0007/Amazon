@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const useProductStore = create((set, get) => ({
   // Fallback to relative /api for Vercel production environments
-  apiUrl: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
+  apiUrl: import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api'),
   products: [],
   businesses: [],
   product: null,

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 const useAuthStore = create((set, get) => ({
-  apiUrl: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
+  apiUrl: import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api'),
   user: JSON.parse(localStorage.getItem('userInfo')) || null,
   loading: false,
   error: null,
