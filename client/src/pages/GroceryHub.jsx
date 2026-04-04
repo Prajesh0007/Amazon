@@ -56,42 +56,37 @@ const GroceryHub = () => {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    <AnimatePresence>
-                        {products.map((p, i) => (
-                            <motion.div
-                                key={p._id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: i * 0.05 }}
-                                className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all group p-4 flex flex-col h-full"
-                            >
-                                <Link to={`/product/${p._id}`} className="flex-1 flex flex-col">
-                                    <div className="relative aspect-square rounded-2xl bg-slate-50 dark:bg-slate-800 mb-4 p-4 flex items-center justify-center overflow-hidden">
-                                        <img 
-                                            src={p.images[0]} 
-                                            className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500"
-                                            alt={p.name}
-                                        />
-                                        <div className="absolute top-2 left-2 px-2 py-1 bg-green-500 text-white rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-lg">
-                                            <Zap size={10} strokeWidth={4} /> 10 mins
-                                        </div>
+                    {(products || []).map((p) => (
+                        <div
+                            key={p._id}
+                            className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all group p-4 flex flex-col h-full"
+                        >
+                            <Link to={`/product/${p._id}`} className="flex-1 flex flex-col">
+                                <div className="relative aspect-square rounded-2xl bg-slate-50 dark:bg-slate-800 mb-4 p-4 flex items-center justify-center overflow-hidden">
+                                    <img 
+                                        src={p.images?.[0] || 'https://via.placeholder.com/200'}
+                                        className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                                        alt={p.name}
+                                    />
+                                    <div className="absolute top-2 left-2 px-2 py-1 bg-green-500 text-white rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-lg">
+                                        <Zap size={10} strokeWidth={4} /> 10 mins
                                     </div>
+                                </div>
 
-                                    <div className="space-y-2 mb-4">
-                                        <h4 className="font-bold text-xs dark:text-white line-clamp-2 leading-tight group-hover:text-green-600 transition-colors">{p.name}</h4>
-                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{p.brand || 'Fresh Mart'}</p>
-                                    </div>
+                                <div className="space-y-2 mb-4">
+                                    <h4 className="font-bold text-xs dark:text-white line-clamp-2 leading-tight group-hover:text-green-600 transition-colors uppercaseTracking-widest">{p.name}</h4>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{p.brand || 'Fresh Mart'}</p>
+                                </div>
 
-                                    <div className="flex items-center justify-between mt-auto">
-                                        <p className="text-sm font-black dark:text-white">₹{p.price}</p>
-                                        <button className="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl hover:bg-green-500 hover:text-white transition-all shadow-sm">
-                                            <ShoppingCart size={16} />
-                                        </button>
-                                    </div>
-                                </Link>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                                <div className="flex items-center justify-between mt-auto">
+                                    <p className="text-sm font-black dark:text-white">₹{p.price}</p>
+                                    <button className="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl hover:bg-green-500 hover:text-white transition-all shadow-sm">
+                                        <ShoppingCart size={16} />
+                                    </button>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

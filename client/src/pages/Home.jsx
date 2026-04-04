@@ -14,13 +14,10 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [serviceType, setServiceType] = useState('Shopping');
 
-  const fetchInitialProducts = useCallback(() => {
+  useEffect(() => {
+    console.log('--- Home Mount/Update Fetch ---', { serviceType, selectedCategory });
     fetchProducts({ category: selectedCategory, pageNumber: 1, serviceType });
   }, [fetchProducts, selectedCategory, serviceType]);
-
-  useEffect(() => {
-    fetchInitialProducts();
-  }, [fetchInitialProducts]);
 
   const handleLoadMore = () => {
     if (page < pages) {
@@ -178,35 +175,24 @@ const Home = () => {
             </div>
           </div>
           
-          <AnimatePresence mode="wait">
+          <div className="min-h-[400px]">
             {loading && page === 1 ? (
               <SkeletonLoader key="skeleton" />
             ) : (
-              <motion.div
-                key="grid"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <ProductGrid products={products} loading={false} />
-                
-                {/* Pagination / Load More */}
-                {page < pages && (
-                  <div className="mt-20 flex flex-col items-center gap-6">
-                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={handleLoadMore}
-                      disabled={loading}
-                      className="px-12 py-5 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl disabled:opacity-50"
-                     >
-                        {loading ? 'Processing...' : 'Load More Items'}
-                     </motion.button>
-                  </div>
-                )}
-              </motion.div>
+              <ProductGrid products={products} loading={false} />
             )}
-          </AnimatePresence>
+
+            {!loading && products.length > 0 && page < pages && (
+              <div className="flex justify-center mt-12 pb-12">
+                <button
+                  onClick={handleLoadMore}
+                  className="amazon-button px-12 py-4 text-lg font-black tracking-widest uppercase transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-amber-500/20"
+                >
+                  Load More Items
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

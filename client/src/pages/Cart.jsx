@@ -52,66 +52,60 @@ const Cart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Cart Items */}
           <div className="lg:col-span-8 space-y-4">
-            <AnimatePresence mode="popLayout">
-              {cart.items.map((item) => (
-                <motion.div
-                  key={item.product._id}
-                  layout
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="bg-white dark:bg-gray-900 rounded-2xl p-6 flex flex-col sm:flex-row gap-6 shadow-sm border border-gray-100 dark:border-gray-800"
-                >
-                  <Link to={`/product/${item.product._id}`} className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 bg-gray-50 dark:bg-white/5 rounded-xl p-2">
-                    <img
-                      src={item.product.images[0]}
-                      alt={item.product.name}
-                      className="w-full h-full object-contain"
-                    />
-                  </Link>
+            {(cart.items || []).map((item) => (
+              <div
+                key={item.product._id}
+                className="bg-white dark:bg-gray-900 rounded-2xl p-6 flex flex-col sm:flex-row gap-6 shadow-sm border border-gray-100 dark:border-gray-800"
+              >
+                <Link to={`/product/${item.product._id}`} className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 bg-gray-50 dark:bg-white/5 rounded-xl p-2">
+                  <img
+                    src={item.product.images[0]}
+                    alt={item.product.name}
+                    className="w-full h-full object-contain"
+                  />
+                </Link>
 
-                  <div className="flex-1 flex flex-col justify-between py-1">
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-start">
-                        <Link to={`/product/${item.product._id}`} className="font-bold text-lg hover:text-[var(--accent)] transition-colors line-clamp-1">
-                          {item.product.name}
-                        </Link>
-                        <span className="font-extrabold text-xl ml-4">₹{(item.product.price * item.qty).toLocaleString('en-IN')}</span>
-                      </div>
-                      <p className="text-xs text-green-600 font-bold uppercase tracking-widest">In Stock</p>
+                <div className="flex-1 flex flex-col justify-between py-1">
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-start">
+                      <Link to={`/product/${item.product._id}`} className="font-bold text-lg hover:text-[var(--accent)] transition-colors line-clamp-1">
+                        {item.product.name}
+                      </Link>
+                      <span className="font-extrabold text-xl ml-4">₹{(item.product.price * item.qty).toLocaleString('en-IN')}</span>
                     </div>
+                    <p className="text-xs text-green-600 font-bold uppercase tracking-widest">In Stock</p>
+                  </div>
 
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-full overflow-hidden bg-gray-50 dark:bg-gray-800 shadow-inner">
-                          <button 
-                            onClick={() => updateQty(item.product._id, Math.max(1, item.qty - 1))}
-                            className="p-1 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span className="w-8 text-center font-bold text-sm">{item.qty}</span>
-                          <button 
-                            onClick={() => updateQty(item.product._id, item.qty + 1)}
-                            className="p-1 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border-l dark:border-gray-700"
-                          >
-                            <Plus size={14} />
-                          </button>
-                        </div>
-                        <div className="h-4 w-px bg-gray-200 dark:bg-gray-800" />
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-full overflow-hidden bg-gray-50 dark:bg-gray-800 shadow-inner">
                         <button 
-                          onClick={() => removeFromCart(item.product._id)}
-                          className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-600 transition-colors"
+                          onClick={() => updateQty(item.product._id, Math.max(1, item.qty - 1))}
+                          className="p-1 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                         >
-                          <Trash2 size={14} /> Remove
+                          <Minus size={14} />
+                        </button>
+                        <span className="w-8 text-center font-bold text-sm">{item.qty}</span>
+                        <button 
+                          onClick={() => updateQty(item.product._id, item.qty + 1)}
+                          className="p-1 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border-l dark:border-gray-700"
+                        >
+                          <Plus size={14} />
                         </button>
                       </div>
-                      <span className="text-xs text-gray-400 font-medium hidden sm:block">Unit price: ₹{item.product.price.toLocaleString('en-IN')}</span>
+                      <div className="h-4 w-px bg-gray-200 dark:bg-gray-800" />
+                      <button 
+                        onClick={() => removeFromCart(item.product._id)}
+                        className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-600 transition-colors"
+                      >
+                        <Trash2 size={14} /> Remove
+                      </button>
                     </div>
+                    <span className="text-xs text-gray-400 font-medium hidden sm:block">Unit price: ₹{item.product.price.toLocaleString('en-IN')}</span>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Checkout Summary */}

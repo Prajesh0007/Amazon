@@ -28,21 +28,27 @@ const useProductStore = create((set, get) => ({
   fetchProducts: async (params = {}) => {
     set({ loading: true, error: null });
     const { keyword = '', pageNumber = 1, category = 'All', minPrice = '', maxPrice = '', sort = '', serviceType = 'All' } = params;
+    console.log('--- Fetching Products ---', { serviceType, keyword, category });
     
     try {
       const { apiUrl } = get();
       const url = `${apiUrl}/products?keyword=${keyword}&page=${pageNumber}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}&serviceType=${serviceType}`;
+      console.log('Target URL:', url);
       const { data } = await axios.get(url);
       
+      const productArr = Array.isArray(data.products) ? data.products : [];
+      console.log('Items Received:', productArr.length);
+      
       set({ 
-        products: pageNumber === 1 ? data.products : [...get().products, ...data.products],
-        pages: data.pages, 
-        page: data.page, 
-        total: data.total,
+        products: pageNumber === 1 ? productArr : [...get().products, ...productArr],
+        pages: data.pages || 1, 
+        page: data.page || 1, 
+        total: data.total || 0,
         activeService: serviceType,
         loading: false 
       });
     } catch (error) {
+      console.error('CRITICAL FETCH ERROR:', error);
       set({ 
         error: error.response?.data?.message || 'Error fetching products', 
         loading: false 

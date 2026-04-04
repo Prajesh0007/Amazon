@@ -86,42 +86,33 @@ const Search = () => {
         </div>
 
         {/* AI Insight Bar */}
-        <AnimatePresence>
-          {aiParams && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mb-8 overflow-hidden"
+        {aiParams && (
+          <div className="mb-8 overflow-hidden bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/30 rounded-[2rem] p-5 flex flex-col md:flex-row items-center gap-4">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+              <Brain size={24} className="animate-pulse" />
+              <span className="font-black text-[10px] uppercase tracking-[0.2em]">Semantic Intent</span>
+            </div>
+            <div className="h-4 w-px bg-blue-200 dark:bg-blue-800 hidden md:block" />
+            <div className="flex-1 flex flex-wrap gap-2 items-center">
+              {aiParams.category && (
+                <span className="bg-white dark:bg-gray-800 px-4 py-1.5 rounded-full text-[10px] font-black border border-blue-200 dark:border-blue-700 text-blue-600 flex items-center gap-1 uppercase tracking-wider">
+                  Target: {aiParams.category} <Check size={12} />
+                </span>
+              )}
+              {(aiParams.keywords || []).map(kw => (
+                <span key={kw} className="bg-white dark:bg-gray-800 px-4 py-1.5 rounded-full text-[10px] font-black border border-gray-200 dark:border-gray-700 flex items-center gap-1 uppercase tracking-wider">
+                  {kw}
+                </span>
+              ))}
+            </div>
+            <button 
+              onClick={() => setAiParams(null)}
+              className="p-2 hover:bg-white/50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400"
             >
-              <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/30 rounded-[2rem] p-5 flex flex-col md:flex-row items-center gap-4">
-                <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                  <Brain size={24} className="animate-pulse" />
-                  <span className="font-black text-[10px] uppercase tracking-[0.2em]">Semantic Intent</span>
-                </div>
-                <div className="h-4 w-px bg-blue-200 dark:bg-blue-800 hidden md:block" />
-                <div className="flex-1 flex flex-wrap gap-2 items-center">
-                  {aiParams.category && (
-                    <span className="bg-white dark:bg-gray-800 px-4 py-1.5 rounded-full text-[10px] font-black border border-blue-200 dark:border-blue-700 text-blue-600 flex items-center gap-1 uppercase tracking-wider">
-                      Target: {aiParams.category} <Check size={12} />
-                    </span>
-                  )}
-                  {aiParams.keywords && aiParams.keywords.map(kw => (
-                    <span key={kw} className="bg-white dark:bg-gray-800 px-4 py-1.5 rounded-full text-[10px] font-black border border-gray-200 dark:border-gray-700 flex items-center gap-1 uppercase tracking-wider">
-                      {kw}
-                    </span>
-                  ))}
-                </div>
-                <button 
-                  onClick={() => setAiParams(null)}
-                  className="p-2 hover:bg-white/50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <X size={18} />
+            </button>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
           {/* Sidebar Filters */}
