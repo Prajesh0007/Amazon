@@ -24,10 +24,7 @@ const ProductCard = ({ product }) => {
   const numReviews = product.numReviews || 0;
 
   return (
-    <motion.div
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="glass-card overflow-hidden group flex flex-col h-full active:scale-[0.98]"
-    >
+    <div className="glass-card overflow-hidden group flex flex-col h-full active:scale-[0.98]">
       <Link to={`/product/${product?._id}`} className="block relative overflow-hidden aspect-square bg-white dark:bg-slate-900/40">
         <img
           src={product?.images?.[0] || 'https://via.placeholder.com/400'}
@@ -86,7 +83,7 @@ const ProductCard = ({ product }) => {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

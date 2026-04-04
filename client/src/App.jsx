@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -52,7 +52,7 @@ function App() {
 
         {/* Pages with Global Layout */}
         <Route path="/" element={<Layout />}>
-          <Route element={<><ServiceHubHeader /><div className="pt-2" /></>}>
+          <Route element={<><ServiceHubHeader /><div className="pt-2" /><Outlet /></>}>
             <Route index element={<Home />} />
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="search" element={<Search />} />
