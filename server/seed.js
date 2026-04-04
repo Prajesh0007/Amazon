@@ -203,5 +203,3 @@ const seedMegaData = async () => {
 };
 
 seedMegaData();
-
-seedMegaData();
