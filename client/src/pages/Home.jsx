@@ -33,6 +33,9 @@ const Home = () => {
     { id: 'Food', name: 'Instant Food', icon: <Zap size={24} />, color: 'orange', desc: 'Swiggy/Zomato', path: '/food-hub' },
     { id: 'Grocery', name: 'Wait-Less', icon: <Truck size={24} />, color: 'green', desc: 'Zepto/Blinkit', path: '/grocery-hub' },
     { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={24} />, color: 'red', desc: 'Apollo/1mg', path: '/health-hub' },
+    { id: 'Stay', name: 'Stay Hub', icon: <HomeIcon size={24} />, color: 'purple', desc: 'Airbnb/Hotels', path: '/stay-hub' },
+    { id: 'Ride', name: 'Ride Hub', icon: <Car size={24} />, color: 'indigo', desc: 'Uber/Ola', path: '/ride-hub' },
+    { id: 'Genius', name: 'Genius Hub', icon: <Tool size={24} />, color: 'amber', desc: 'Urban Company', path: '/genius-hub' },
   ];
 
   const categories = [
@@ -52,7 +55,7 @@ const Home = () => {
   return (
     <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-32 transition-colors duration-700">
       {/* Super App Service Hub */}
-      <div className="max-w-7xl mx-auto pt-16 px-6 grid grid-cols-2 md:grid-cols-4 gap-4 pb-12">
+      <div className="max-w-7xl mx-auto pt-16 px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 pb-12">
         {services.map((s) => (
           <Link
             key={s.id}
@@ -99,6 +102,9 @@ const Home = () => {
                {serviceType === 'Food' && <>CRAVE <br /><span className="text-orange-500">INSTANT</span></>}
                {serviceType === 'Grocery' && <>DAILY <br /><span className="text-green-500">FRESH</span></>}
                {serviceType === 'Pharmacy' && <>CARE <br /><span className="text-red-500">VITAL</span></>}
+               {serviceType === 'Stay' && <>ESCAPE <br /><span className="text-purple-500">LUXURY</span></>}
+               {serviceType === 'Ride' && <>MOVE <br /><span className="text-indigo-500">ELITE</span></>}
+               {serviceType === 'Genius' && <>FIX <br /><span className="text-amber-500">GENIUS</span></>}
              </motion.h1>
           </div>
         </div>
@@ -109,6 +115,8 @@ const Home = () => {
           src={
             serviceType === 'Shopping' ? "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80" :
             serviceType === 'Food' ? "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600&q=80" :
+            serviceType === 'Stay' ? "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80" :
+            serviceType === 'Ride' ? "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=1600&q=80" :
             "https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80"
           } 
           className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"

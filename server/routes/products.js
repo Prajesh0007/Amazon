@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const Business = require('../models/Business');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 // @desc    Fetch all products
@@ -48,6 +49,22 @@ router.get('/', async (req, res) => {
     .skip(pageSize * (page - 1));
 
   res.json({ products, page, pages: Math.ceil(count / pageSize), total: count });
+});
+
+// @desc    Fetch all businesses by type
+// @route   GET /api/products/businesses
+router.get('/businesses', async (req, res) => {
+  const { businessType } = req.query;
+  const query = businessType ? { businessType } : {};
+  const businesses = await Business.find(query).sort({ rating: -1 });
+  res.json(businesses);
+});
+
+// @desc    Fetch products by business ID
+// @route   GET /api/products/business/:id/products
+router.get('/business/:id/products', async (req, res) => {
+  const products = await Product.find({ business: req.params.id }).sort({ createdAt: -1 });
+  res.json(products);
 });
 
 // @desc    Fetch single product

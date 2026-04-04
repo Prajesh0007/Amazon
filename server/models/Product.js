@@ -34,7 +34,7 @@ const productSchema = new mongoose.Schema({
   isPrime: { type: Boolean, default: true },
   serviceType: { 
     type: String, 
-    enum: ['Shopping', 'Food', 'Grocery', 'Pharmacy'], 
+    enum: ['Shopping', 'Food', 'Grocery', 'Pharmacy', 'Stay', 'Ride', 'HomeService'], 
     default: 'Shopping' 
   },
   isVeg: { type: Boolean },

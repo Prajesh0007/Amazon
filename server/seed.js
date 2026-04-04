@@ -5,18 +5,21 @@ const Product = require('./models/Product');
 const Review = require('./models/Review');
 const Business = require('./models/Business');
 const Question = require('./models/Question');
+const Booking = require('./models/Booking');
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const seedMegaData = async () => {
   try {
     const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/shopdb';
     const options = {
-      serverSelectionTimeoutMS: 60000,
-      socketTimeoutMS: 60000,
-      connectTimeoutMS: 60000,
+      serverSelectionTimeoutMS: 120000,
+      socketTimeoutMS: 120000,
+      connectTimeoutMS: 120000,
       family: 4 
     };
     await mongoose.connect(MONGO_URI, options);
-    console.log('Connected to MongoDB for Mega-Service Scaling...');
+    console.log('Connected to MongoDB for 7-Vertical Super App Expansion...');
 
     // Clear existing data
     await User.deleteMany();
@@ -24,6 +27,7 @@ const seedMegaData = async () => {
     await Review.deleteMany();
     await Business.deleteMany();
     await Question.deleteMany();
+    await Booking.deleteMany();
 
     // Create Admin
     const admin = await User.create({
@@ -35,11 +39,15 @@ const seedMegaData = async () => {
 
     const businessData = [
         { name: 'Elite Electronics Hub', type: 'Warehouse', tags: ['Tech', 'Gadgets'] },
-        { name: 'Pizza Paradise', type: 'Restaurant', tags: ['Italian', 'Pizza', 'Fast Food'] },
-        { name: 'Spice Route', type: 'Restaurant', tags: ['Indian', 'Curry', 'Spicy'] },
+        { name: 'Pizza Paradise', type: 'Restaurant', tags: ['Italian', 'Pizza', 'Fast Food'], cost: 500 },
+        { name: 'Spice Route', type: 'Restaurant', tags: ['Indian', 'Curry', 'Spicy'], cost: 400 },
         { name: 'Healthy Greens', type: 'GroceryStore', tags: ['Organic', 'Vegetables', 'Fresh'] },
         { name: 'Pharma 24/7', type: 'Pharmacy', tags: ['Medicine', 'Healthcare'] },
-        { name: 'Quick Mart', type: 'GroceryStore', tags: ['Snacks', 'Drinks', 'Essentials'] }
+        { name: 'Quick Mart', type: 'GroceryStore', tags: ['Snacks', 'Drinks', 'Essentials'] },
+        { name: 'The Grand Resort', type: 'Stay', tags: ['Luxury', 'Resort', 'Swimming'], cost: 5000 },
+        { name: 'Mountain View Villas', type: 'Stay', tags: ['Hills', 'Scenic', 'Villas'], cost: 3500 },
+        { name: 'Uber Elite Taxi', type: 'Ride', tags: ['Sedan', 'SUV', 'Electric'], cost: 20 },
+        { name: 'Handy Genius', type: 'HomeService', tags: ['Plumbing', 'Electrical', 'Cleaning'], cost: 300 }
     ];
 
     const businesses = [];
@@ -51,6 +59,7 @@ const seedMegaData = async () => {
             tags: b.tags,
             rating: 4.5,
             numReviews: 100,
+            avgCostForTwo: b.cost,
             location: { city: 'Mumbai', address: 'Main Street' }
         });
         businesses.push(created);
@@ -61,7 +70,7 @@ const seedMegaData = async () => {
         categories: ['Electronics', 'Computing', 'Smart Home', 'Fashion', 'Sports'],
         images: ['1498049794561-7780e7231661', '1517694712202-14dd9538aa97'],
         manufacturers: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
-        specKeys: ['Power', 'Connectivity', 'Warranty', 'Weight']
+        specKeys: ['Power', 'Connectivity', 'Weight']
       },
       Food: {
         categories: ['Burger', 'Pizza', 'Sushi', 'Indian', 'Italian'],
@@ -76,25 +85,46 @@ const seedMegaData = async () => {
         specKeys: ['Weight', 'Organic', 'Expiry', 'Storage']
       },
       Pharmacy: {
-        categories: ['Medicine', 'Personal Care', 'Supplements', 'Health Hub', 'Devices'],
+        categories: ['Medicine', 'Personal Care', 'Supplements', 'Devices'],
         images: ['1584308661274-219ffec907a3', '1512069772995-ec65ed4563c1'],
         manufacturers: ['Pfizer', 'GSK', 'Cipla', 'HealthCare+'],
-        specKeys: ['Dosage', 'Form', 'Contraindications', 'Age Group']
+        specKeys: ['Dosage', 'Form', 'Age Group']
+      },
+      Stay: {
+        categories: ['Suites', 'Rooms', 'Villas', 'Resorts', 'Cabins'],
+        images: ['1566073771259-6a8506099945', '1542314831-068cd1dbfeeb'],
+        manufacturers: ['StayWell', 'Grand Hotels', 'Peaceful Escapes'],
+        specKeys: ['Beds', 'Amenities', 'Cancellation', 'View']
+      },
+      Ride: {
+        categories: ['Sedan', 'SUV', 'Luxury', 'Shared', 'Electric'],
+        images: ['1533473359331-0135ef1b58bf', '1542281286-9e0a16bb7366'],
+        manufacturers: ['Mega Rides', 'Captain Drive', 'SafeTravels'],
+        specKeys: ['Capacity', 'Fuel', 'Climate', 'Safety']
+      },
+      HomeService: {
+        categories: ['Plumbing', 'Electrical', 'Cleaning', 'Salon', 'AC Repair'],
+        images: ['1581578731548-c64695ce6958', '1621905251189-08b45d6a269e'],
+        manufacturers: ['Urban Genius', 'HomeHero', 'Expert Fix'],
+        specKeys: ['Exp', 'Certified', 'Equipment', 'Warranty']
       }
     };
 
-    const serviceTypes = ['Shopping', 'Food', 'Grocery', 'Pharmacy'];
-    const itemsPerService = 5000;
-    const batchSize = 250;
+    const serviceTypes = Object.keys(serviceConfigs);
+    const itemsPerService = 3000; 
+    const batchSize = 50; 
 
-    console.log(`Generating ${serviceTypes.length * itemsPerService} items across all services...`);
+    console.log(`Generating ${serviceTypes.length * itemsPerService} items across 7 verticals...`);
 
     for (const service of serviceTypes) {
-        console.log(`Seeding ${service} vertical...`);
+        console.log(`Seeding ${service} assets...`);
         const config = serviceConfigs[service];
         
         for (let i = 0; i < itemsPerService; i += batchSize) {
             const batch = [];
+            const reviewsBatch = [];
+            const questionsBatch = [];
+
             for (let j = 0; j < Math.min(batchSize, itemsPerService - i); j++) {
                 const cat = config.categories[Math.floor(Math.random() * config.categories.length)];
                 const img = config.images[Math.floor(Math.random() * config.images.length)];
@@ -102,64 +132,76 @@ const seedMegaData = async () => {
                     if (service === 'Food') return b.businessType === 'Restaurant';
                     if (service === 'Grocery') return b.businessType === 'GroceryStore';
                     if (service === 'Pharmacy') return b.businessType === 'Pharmacy';
+                    if (service === 'Stay') return b.businessType === 'Stay';
+                    if (service === 'Ride') return b.businessType === 'Ride';
+                    if (service === 'HomeService') return b.businessType === 'HomeService';
                     return b.businessType === 'Warehouse';
                 }) || businesses[0];
 
                 const specs = {};
                 config.specKeys.forEach(key => {
-                    specs[key] = `Standard ${key} Spec Value`;
+                    specs[key] = `High-Spec ${key} Value`;
                 });
 
+                const productId = new mongoose.Types.ObjectId();
                 batch.push({
-                    name: `${cat} ${service} Item #${i + j + 1}`,
-                    description: `Premium quality ${cat} from the ${service} catalog. Designed for excellence.`,
+                    _id: productId,
+                    name: `${cat} ${service} ${i + j + 1}`,
+                    description: `Premium grade ${cat} asset in the ${service} ecosystem. Top rated Choice.`,
                     price: Math.floor(Math.random() * 5000) + 100,
                     category: cat,
                     serviceType: service,
                     brand: config.manufacturers[Math.floor(Math.random() * config.manufacturers.length)],
-                    manufacturer: config.manufacturers[Math.floor(Math.random() * config.manufacturers.length)],
                     images: [`https://images.unsplash.com/photo-${img}?w=600&q=80`],
                     stock: Math.floor(Math.random() * 500) + 10,
                     rating: (Math.random() * 2 + 3).toFixed(1),
                     numReviews: Math.floor(Math.random() * 2000),
                     specifications: specs,
-                    timeToDeliver: service === 'Grocery' ? '15 mins' : (service === 'Food' ? '30-45 mins' : '2-4 Days'),
+                    timeToDeliver: service === 'Grocery' ? '15 mins' : (service === 'Food' ? '30-45 mins' : (service === 'Ride' ? '5 mins' : 'Instant')),
                     business: biz._id,
                     isPrime: Math.random() > 0.3
                 });
-            }
-            const createdProducts = await Product.insertMany(batch);
 
-            // Generate some reviews for each product in the batch
-            const topProducts = createdProducts.slice(0, 5); 
-            for (const p of topProducts) {
-                await Review.create({
-                    product: p._id,
-                    user: admin._id,
-                    name: 'Mega User',
-                    rating: 5,
-                    comment: 'Absolutely fantastic quality!',
-                    isVerified: true
-                });
-
-                await Question.create({
-                    product: p._id,
-                    user: admin._id,
-                    question: `Is this ${p.name} good for long term use?`,
-                    answer: 'Yes, it is highly durable and highly recommended by experts.',
-                    isAnswered: true
-                });
+                // Generate reviews/questions for some items
+                if (j % 10 === 0) {
+                    reviewsBatch.push({
+                        product: productId,
+                        user: admin._id,
+                        name: 'Verified Customer',
+                        rating: 5,
+                        comment: 'Truly remarkable experience with this service!',
+                        isVerified: true
+                    });
+                    questionsBatch.push({
+                        product: productId,
+                        user: admin._id,
+                        question: `Is this ${service} service professional?`,
+                        answer: 'Absolutely, we pride ourselves on elite standards.',
+                        isAnswered: true
+                    });
+                }
             }
+
+            await Product.insertMany(batch);
+            if (reviewsBatch.length) await Review.insertMany(reviewsBatch);
+            if (questionsBatch.length) await Question.insertMany(questionsBatch);
+
+            process.stdout.write('.');
+            if ((i + batchSize) % 500 === 0) console.log(` [Seeded ${i + batchSize}/${itemsPerService}]`);
+            
+            await sleep(500); // Throttle for Atlas
         }
-        console.log(`${service} vertical seeded successfully.`);
+        console.log(`\n${service} successfully integrated.`);
     }
 
-    console.log('Final Verification: Seeding Complete!');
+    console.log('--- ALL SYSTEMS GREEN: MEGA-SEED COMPLETE ---');
     process.exit();
   } catch (err) {
-    console.error('Mega-Seeding error:', err.message);
+    console.error('Mega-Seeding Fatal error:', err.message);
     process.exit(1);
   }
 };
+
+seedMegaData();
 
 seedMegaData();

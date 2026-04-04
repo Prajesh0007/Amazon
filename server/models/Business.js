@@ -6,7 +6,7 @@ const businessSchema = new mongoose.Schema({
   logo: { type: String },
   businessType: { 
     type: String, 
-    enum: ['Restaurant', 'GroceryStore', 'Pharmacy', 'Warehouse'],
+    enum: ['Restaurant', 'GroceryStore', 'Pharmacy', 'Warehouse', 'Stay', 'Ride', 'Hotel', 'HomeService'],
     required: true 
   },
   owner: {

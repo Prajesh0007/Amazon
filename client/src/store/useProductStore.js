@@ -5,12 +5,25 @@ const useProductStore = create((set, get) => ({
   // Fallback to relative /api for Vercel production environments
   apiUrl: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   products: [],
+  businesses: [],
   product: null,
   loading: false,
   error: null,
   page: 1,
   total: 0,
   activeService: 'Shopping',
+
+  fetchBusinesses: async (params = {}) => {
+    set({ loading: true, error: null });
+    const { businessType = '' } = params;
+    try {
+      const { apiUrl } = get();
+      const { data } = await axios.get(`${apiUrl}/products/businesses?businessType=${businessType}`);
+      set({ businesses: data, loading: false });
+    } catch (error) {
+      set({ error: 'Error fetching businesses', loading: false });
+    }
+  },
 
   fetchProducts: async (params = {}) => {
     set({ loading: true, error: null });

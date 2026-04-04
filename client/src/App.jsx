@@ -15,6 +15,11 @@ import ConsumerHub from './pages/ConsumerHub';
 import FoodHub from './pages/FoodHub';
 import GroceryHub from './pages/GroceryHub';
 import HealthHub from './pages/HealthHub';
+import StayHub from './pages/StayHub';
+import RideHub from './pages/RideHub';
+import GeniusHub from './pages/GeniusHub';
+import CaptainDashboard from './pages/CaptainDashboard';
+import ServiceHubHeader from './components/ServiceHubHeader';
 import ShopBotChat from './components/ShopBotChat';
 import useAuthStore from './store/useAuthStore';
 
@@ -47,15 +52,21 @@ function App() {
 
         {/* Pages with Global Layout */}
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="product/:id" element={<ProductDetails />} />
-          <Route path="search" element={<Search />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="wishlist" element={<Wishlist />} />
-          <Route path="consumer-hub" element={<ConsumerHub />} />
-          <Route path="food-hub" element={<FoodHub />} />
-          <Route path="grocery-hub" element={<GroceryHub />} />
-          <Route path="health-hub" element={<HealthHub />} />
+          <Route element={<><ServiceHubHeader /><div className="pt-2" /></>}>
+            <Route index element={<Home />} />
+            <Route path="product/:id" element={<ProductDetails />} />
+            <Route path="search" element={<Search />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="wishlist" element={<Wishlist />} />
+            <Route path="consumer-hub" element={<ConsumerHub />} />
+            <Route path="food-hub" element={<FoodHub />} />
+            <Route path="grocery-hub" element={<GroceryHub />} />
+            <Route path="health-hub" element={<HealthHub />} />
+            <Route path="stay-hub" element={<StayHub />} />
+            <Route path="ride-hub" element={<RideHub />} />
+            <Route path="genius-hub" element={<GeniusHub />} />
+            <Route path="captain-dashboard" element={<CaptainDashboard />} />
+          </Route>
           
           <Route 
             path="checkout" 
