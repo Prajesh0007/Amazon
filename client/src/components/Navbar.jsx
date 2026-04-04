@@ -17,6 +17,9 @@ const Navbar = () => {
   const { user, logout } = useAuthStore();
   const { cart } = useCartStore();
   const navigate = useNavigate();
+  const [isPrime, setIsPrime] = useState(
+    localStorage.getItem('isPrime') === 'true'
+  );
 
   useEffect(() => {
     if (isDarkMode) {

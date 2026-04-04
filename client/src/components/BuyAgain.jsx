@@ -18,7 +18,8 @@ const BuyAgain = () => {
             try {
                 // In a real app, this would be a dedicated "buy again" endpoint
                 // For now, we'll fetch some products that might interest them or simulate from orders
-                const ordersResponse = await axios.get(`http://localhost:5000/api/orders/myorders`, {
+                const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+                const ordersResponse = await axios.get(`${apiUrl}/orders/myorders`, {
                     headers: { 'Authorization': `Bearer ${user.token}` }
                 });
                 
@@ -41,7 +42,7 @@ const BuyAgain = () => {
                 
                 // Fallback: Simulate if API fails or no orders
                 // This is just for demonstration purposes
-                const fallbackResponse = await axios.get(`http://localhost:5000/api/products?limit=6`);
+                const fallbackResponse = await axios.get(`${apiUrl}/products?limit=6`);
                 setBoughtItems(fallbackResponse.data.products);
             } finally {
                 setLoading(false);

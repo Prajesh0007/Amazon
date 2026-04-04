@@ -12,7 +12,8 @@ const RelatedProducts = ({ category, currentProductId }) => {
     useEffect(() => {
         const fetchRelated = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/products?category=${category}&limit=12`);
+                const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+                const response = await axios.get(`${apiUrl}/products?category=${category}&limit=12`);
                 // Filter out current product
                 const filtered = response.data.products.filter(p => p._id !== currentProductId);
                 setProducts(filtered);

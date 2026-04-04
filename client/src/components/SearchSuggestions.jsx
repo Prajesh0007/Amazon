@@ -18,7 +18,8 @@ const SearchSuggestions = ({ searchTerm, setSearchTerm, isVisible, setIsVisible 
             setLoading(true);
             try {
                 // In a real app, this would be a dedicated suggestions endpoint
-                const response = await axios.get(`http://localhost:5000/api/products?keyword=${searchTerm}&limit=6`);
+                const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+                const response = await axios.get(`${apiUrl}/products?keyword=${searchTerm}&limit=6`);
                 setSuggestions(response.data.products || []);
             } catch (error) {
                 console.error("Suggestions fetch error:", error);

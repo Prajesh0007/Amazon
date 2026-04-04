@@ -35,7 +35,8 @@ const ShopBotChat = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/ai/chat`, {
+      const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+      const response = await fetch(`${apiUrl}/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -103,7 +104,8 @@ const ShopBotChat = () => {
             if (productMatch) {
                 const productName = productMatch[1];
                 try {
-                    const searchRes = await axios.get(`http://localhost:5000/api/products?keyword=${productName}&limit=1`);
+                    const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+                    const searchRes = await axios.get(`${apiUrl}/products?keyword=${productName}&limit=1`);
                     if (searchRes.data.products && searchRes.data.products.length > 0) {
                         const product = searchRes.data.products[0];
                         addToCart(product, 1);

@@ -28,10 +28,10 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="glass-card overflow-hidden group flex flex-col h-full active:scale-[0.98]"
     >
-      <Link to={`/product/${product._id}`} className="block relative overflow-hidden aspect-square bg-white dark:bg-slate-900/40">
+      <Link to={`/product/${product?._id}`} className="block relative overflow-hidden aspect-square bg-white dark:bg-slate-900/40">
         <img
-          src={product.images[0]}
-          alt={product.name}
+          src={product?.images?.[0] || 'https://via.placeholder.com/400'}
+          alt={product?.name || 'Product Image'}
           className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-700 ease-out drop-shadow-xl"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -39,10 +39,10 @@ const ProductCard = ({ product }) => {
 
       <div className="p-4 flex flex-col flex-grow gap-2">
         <Link 
-          to={`/product/${product._id}`}
+          to={`/product/${product?._id}`}
           className="text-sm font-bold line-clamp-2 hover:text-amber-500 transition-colors h-10 tracking-tight leading-snug"
         >
-          {product.name}
+          {product?.name || 'Unnamed Product'}
         </Link>
 
         <div className="flex items-center gap-1">
@@ -65,11 +65,11 @@ const ProductCard = ({ product }) => {
         <div className="mt-auto">
           <div className="flex items-baseline gap-1">
             <span className="text-sm font-bold text-slate-500 dark:text-slate-400">₹</span>
-            <span className="text-2xl font-black tracking-tighter">{product.price.toLocaleString('en-IN')}</span>
+            <span className="text-2xl font-black tracking-tighter">{(product?.price || 0).toLocaleString('en-IN')}</span>
           </div>
           
           <p className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-wider">
-            M.R.P: <span className="line-through">₹{(product.price * 1.2).toLocaleString('en-IN')}</span>
+            M.R.P: <span className="line-through">₹{((product?.price || 0) * 1.2).toLocaleString('en-IN')}</span>
           </p>
 
           <div className="flex items-center gap-2 mt-2">

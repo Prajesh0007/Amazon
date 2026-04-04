@@ -8,8 +8,9 @@ const useProductStore = create((set, get) => ({
   product: null,
   loading: false,
   error: null,
-  pages: 1,
   page: 1,
+  total: 0,
+  activeService: 'Shopping',
 
   fetchProducts: async (params = {}) => {
     set({ loading: true, error: null });
@@ -21,17 +22,13 @@ const useProductStore = create((set, get) => ({
       const { data } = await axios.get(url);
       
       set({ 
-        products: pageNumber === 1 ? data.products : undefined,
+        products: pageNumber === 1 ? data.products : [...get().products, ...data.products],
         pages: data.pages, 
         page: data.page, 
         total: data.total,
         activeService: serviceType,
         loading: false 
       });
-      
-      if (pageNumber === 1) {
-        set({ products: data.products });
-      }
     } catch (error) {
       set({ 
         error: error.response?.data?.message || 'Error fetching products', 

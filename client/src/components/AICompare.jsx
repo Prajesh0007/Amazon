@@ -13,7 +13,8 @@ const AICompare = ({ currentProduct }) => {
         setError(null);
         try {
             // 1. Fetch a similar product (same category, different brand if possible)
-            const searchRes = await axios.get(`http://localhost:5000/api/products?category=${currentProduct.category}&limit=5`);
+            const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+            const searchRes = await axios.get(`${apiUrl}/products?category=${currentProduct.category}&limit=5`);
             const similar = searchRes.data.products.find(p => p._id !== currentProduct._id) || searchRes.data.products[0];
 
             if (!similar || similar._id === currentProduct._id) {
@@ -22,7 +23,7 @@ const AICompare = ({ currentProduct }) => {
             }
 
             // 2. Ask Qwen to compare
-            const compareRes = await axios.post(`http://localhost:5000/api/ai/compare`, {
+            const compareRes = await axios.post(`${apiUrl}/ai/compare`, {
                 productA: currentProduct,
                 productB: similar
             });

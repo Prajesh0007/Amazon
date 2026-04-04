@@ -42,7 +42,8 @@ const Checkout = () => {
         totalPrice: total
       };
 
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/orders`, orderData, {
+      const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+      const { data } = await axios.post(`${apiUrl}/orders`, orderData, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
 
