@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wrench, Shield, Search, Star, Clock, Heart, ChevronRight, User, Phone, CheckCircle2, Zap, Settings, Tool, Sparkles, Activity, MapPin } from 'lucide-react';
+import { Wrench, Shield, Search, Star, Clock, Heart, ChevronRight, User, Phone, CheckCircle2, Zap, Settings, Hammer, Sparkles, Activity, MapPin } from 'lucide-react';
 import useProductStore from '../store/useProductStore';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -17,7 +17,7 @@ const GeniusHub = () => {
     const categories = [
         { id: 'All', icon: <Settings size={18} />, label: 'All Services' },
         { id: 'Cleaning', icon: <Sparkles size={18} />, label: 'Elite Cleaning' },
-        { id: 'Repair', icon: <Tool size={18} />, label: 'Master Repair' },
+        { id: 'Repair', icon: <Hammer size={18} />, label: 'Master Repair' },
         { id: 'Electrical', icon: <Zap size={18} />, label: 'Grid Support' },
         { id: 'Plumbing', icon: <Activity size={18} />, label: 'Fluid Repair' },
         { id: 'Salon', icon: <User size={18} />, label: 'Grooming Hub' },
