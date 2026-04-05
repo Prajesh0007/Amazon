@@ -32,29 +32,41 @@ const FoodHub = () => {
         toast.success(`${p.name} added to cart!`);
     };
 
+    if (loading) {
+        return (
+            <div className="bg-[#010103] min-h-screen pb-20 pt-32 px-6">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    {[1, 2, 3, 4, 5, 6].map((n) => (
+                        <div key={n} className="bg-slate-900/40 animate-pulse rounded-[3rem] h-[500px] border border-white/5" />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="bg-orange-50/10 dark:bg-slate-950 min-h-screen pb-20">
+        <div className="bg-[#010103] dark:bg-[#010103] min-h-screen pb-20">
             {/* Food Header */}
-            <div className="px-6 py-12 bg-white dark:bg-slate-900 border-b border-orange-100 dark:border-orange-950/20 sticky top-[4.5rem] z-40 shadow-sm">
+            <div className="px-6 py-12 bg-black/40 backdrop-blur-3xl border-b border-white/5 sticky top-[4.5rem] z-40 shadow-2xl">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-3xl flex items-center justify-center text-orange-600 shadow-xl">
+                        <div className="w-16 h-16 bg-amber-500/10 rounded-3xl flex items-center justify-center text-amber-500 shadow-2xl shadow-amber-500/10">
                             <Utensils size={32} />
                         </div>
                         <div className="space-y-1">
-                            <h1 className="text-4xl font-black uppercase tracking-tighter dark:text-white leading-none">Food <span className="text-orange-500 underline decoration-4 underline-offset-8">Hub</span></h1>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">30-minute node delivery active</p>
+                            <h1 className="text-4xl font-black uppercase tracking-tighter text-white leading-none font-elegant">Midnight <span className="text-amber-500 underline decoration-4 underline-offset-8">Tastes</span></h1>
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Elite 20-minute delivery active</p>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800 rounded-full px-8 py-4 border border-slate-100 dark:border-slate-700 w-full md:w-96 shadow-inner">
-                        <Search size={18} className="text-slate-400" />
+                    <div className="flex items-center gap-4 bg-white/5 rounded-[2rem] px-8 py-5 border border-white/10 w-full md:w-96 shadow-2xl">
+                        <Search size={18} className="text-slate-500" />
                         <input 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             type="text" 
-                            placeholder="Craving something specific?" 
-                            className="bg-transparent border-none outline-none w-full text-xs font-bold uppercase tracking-widest dark:text-white"
+                            placeholder="Discover your next craving..." 
+                            className="bg-transparent border-none outline-none w-full text-xs font-bold uppercase tracking-widest text-white placeholder-slate-600"
                         />
                     </div>
                 </div>
@@ -67,10 +79,10 @@ const FoodHub = () => {
                         <button
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id)}
-                            className={`flex items-center gap-3 px-8 py-4 rounded-2xl border font-black text-xs uppercase tracking-widest transition-all ${
+                            className={`flex items-center gap-3 px-8 py-4 rounded-2xl border font-black text-xs uppercase tracking-widest transition-all duration-500 ${
                                 selectedCategory === cat.id 
-                                ? 'bg-orange-500 text-white border-orange-500 shadow-xl shadow-orange-500/30 scale-105' 
-                                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-400 hover:border-orange-500/30'
+                                ? 'bg-amber-500 text-black border-amber-500 shadow-2xl shadow-amber-500/20 scale-105' 
+                                : 'bg-white/5 border-white/5 text-slate-500 hover:border-amber-500/30'
                             }`}
                         >
                             {cat.icon} {cat.label}
@@ -80,39 +92,53 @@ const FoodHub = () => {
 
                 {/* Vertical Food Display Hub */}
                 <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    {filteredFood.map((p) => (
-                        <div key={p._id} className="bg-white dark:bg-slate-900 rounded-[3rem] p-8 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-3xl transition-all group relative overflow-hidden flex flex-col">
+                    {filteredFood.length === 0 && !loading ? (
+                        <div className="col-span-full py-40 text-center space-y-4">
+                             <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <Search size={32} className="text-slate-700" />
+                             </div>
+                             <h3 className="text-2xl font-black uppercase text-slate-700 tracking-tighter">No Elite Tastes Found</h3>
+                             <p className="text-xs font-bold text-slate-800 uppercase tracking-widest">Adjust your filters or command a different search</p>
+                        </div>
+                    ) : filteredFood.map((p) => (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            key={p._id} 
+                            className="bg-black/20 backdrop-blur-md rounded-[3.5rem] p-8 border border-white/5 shadow-2xl hover:shadow-amber-500/5 transition-all group relative overflow-hidden flex flex-col"
+                        >
                             {/* Signature Recipe Card Design */}
-                            <div className="relative aspect-video rounded-[2rem] overflow-hidden mb-8 bg-slate-50 dark:bg-slate-800 shadow-inner group-hover:shadow-2xl transition-all">
-                                <img src={p.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={p.name} />
-                                <div className="absolute top-4 right-4 px-4 py-2 bg-white/90 dark:bg-slate-900/90 rounded-2xl text-[10px] font-black uppercase tracking-widest text-orange-600 shadow-xl backdrop-blur-md flex items-center gap-2">
-                                    <Clock size={12} /> {p.timeToDeliver || '30 Mins'}
+                            <div className="relative aspect-square rounded-[2.5rem] overflow-hidden mb-8 bg-slate-900 shadow-2xl group-hover:shadow-amber-500/10 transition-all">
+                                <img src={p.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt={p.name} />
+                                <div className="absolute top-4 right-4 px-5 py-3 bg-black/80 rounded-2xl text-[10px] font-black uppercase tracking-widest text-amber-500 shadow-2xl border border-white/10 backdrop-blur-md flex items-center gap-2">
+                                    <Clock size={12} /> {p.timeToDeliver || '20 Mins'}
                                 </div>
-                                <div className="absolute bottom-4 left-4 flex gap-2">
-                                     <div className="px-3 py-1 bg-green-500/90 text-white text-[8px] font-black rounded-lg shadow-lg uppercase">Prime Node</div>
-                                     <div className="px-3 py-1 bg-orange-500/90 text-white text-[8px] font-black rounded-lg shadow-lg uppercase">Signature</div>
+                                <div className="absolute bottom-6 left-6 flex gap-2">
+                                     <div className="px-4 py-2 bg-amber-500 text-black text-[9px] font-black rounded-xl shadow-2xl uppercase tracking-tighter">Elite Express</div>
+                                     <div className="px-4 py-2 bg-white/10 text-white text-[9px] font-black rounded-xl shadow-2xl uppercase tracking-tighter backdrop-blur-md border border-white/10">Midnight Signature</div>
                                 </div>
                             </div>
 
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-start">
-                                    <div>
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1 italic">{p.category} Special</p>
-                                        <h3 className="text-2xl font-black uppercase tracking-tighter dark:text-white leading-tight line-clamp-1">{p.name || 'Chef’s Selection'}</h3>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-amber-500/60 uppercase tracking-[0.3em] italic">{p.category} Specialist</p>
+                                        <h3 className="text-2xl font-black uppercase tracking-tighter text-white leading-tight line-clamp-1">{p.name}</h3>
                                     </div>
-                                    <div className="w-12 h-12 bg-orange-50 dark:bg-orange-950/20 rounded-2xl flex items-center justify-center text-orange-600">
+                                    <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 border border-amber-500/20">
                                         <Flame size={24} className="group-hover:animate-bounce" />
                                     </div>
                                 </div>
 
                                 {/* Deep Metadata: Ingredients */}
                                 <div className="space-y-3">
-                                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">
-                                         <BookOpen size={12} /> Master Ingredients
+                                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5 pb-2">
+                                         <BookOpen size={12} /> Ingredients Palette
                                      </div>
                                      <div className="flex flex-wrap gap-2">
-                                          {(p.ingredients || ['Artisanal Base', 'Chef Spices', 'Local Greens']).map((ing, idx) => (
-                                              <span key={idx} className="px-3 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg text-[8px] font-bold text-slate-500 uppercase dark:text-slate-400 border border-slate-100 dark:border-slate-700">
+                                          {(p.ingredients || ['Artisanal Base', 'Chef Spices', 'Midnight Greens']).map((ing, idx) => (
+                                              <span key={idx} className="px-3 py-1 bg-white/5 rounded-lg text-[9px] font-bold text-slate-400 uppercase tracking-widest border border-white/5">
                                                   {ing}
                                               </span>
                                           ))}
@@ -121,33 +147,33 @@ const FoodHub = () => {
 
                                 {/* Deep Metadata: Recipe / Description */}
                                 <div className="space-y-2 flex-1">
-                                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">
-                                         <Info size={12} /> Chef's Protocol
+                                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5 pb-2">
+                                         <Info size={12} /> Culinary Protocol
                                      </div>
-                                     <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic line-clamp-3">
-                                         {p.recipe || p.description || 'Our secret signature dish prepared with high-grade organic elements and tradition.'}
+                                     <p className="text-[10px] font-medium text-slate-400 leading-relaxed italic line-clamp-3">
+                                         {p.recipe || p.description}
                                      </p>
                                 </div>
 
                                 <div className="flex items-center justify-between pt-8 mt-auto">
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 line-through">₹{p.price + 150}</span>
-                                        <p className="text-3xl font-black dark:text-white tracking-tighter leading-none">₹{p.price}</p>
+                                        <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none mb-1 line-through">₹{p.price + 250}</span>
+                                        <p className="text-3xl font-black text-white tracking-tighter leading-none">₹{p.price}</p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <button className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all shadow-sm">
+                                        <button className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all shadow-2xl border border-white/5">
                                             <Heart size={20} />
                                         </button>
                                         <button 
                                             onClick={() => handleAddToCart(p)}
-                                            className="px-8 bg-orange-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                                            className="px-8 bg-amber-500 text-black rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
                                         >
-                                            Add Node <ShoppingBag size={14} />
+                                            Add to Order <ShoppingBag size={14} />
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
