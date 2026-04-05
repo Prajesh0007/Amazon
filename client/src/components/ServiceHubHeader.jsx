@@ -26,7 +26,7 @@ const ServiceHubHeader = () => {
   };
 
   return (
-    <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 sticky top-[4.5rem] z-50 overflow-hidden">
+    <div className="bg-white/90 backdrop-blur-xl border-b border-slate-100 sticky top-[4.5rem] z-50 overflow-hidden shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-4 overflow-x-auto no-scrollbar">
         {services.map((s) => {
           const isActive = location.pathname === s.path;
@@ -36,22 +36,22 @@ const ServiceHubHeader = () => {
             <Link
               key={s.id}
               to={s.path}
-              className={`flex-shrink-0 flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all duration-300 ${
+              className={`flex-shrink-0 flex items-center gap-3 px-6 py-3 rounded-[1.5rem] border-2 transition-all duration-500 hover:scale-105 active:scale-95 ${
                 isActive 
-                ? `${config.bg} ${config.border} ${config.shadow}` 
-                : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'
+                ? `${config.bg} ${config.border} ${config.shadow} scale-105` 
+                : 'bg-white border-slate-50 text-slate-400 hover:border-slate-200 shadow-sm'
               }`}
             >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                isActive ? `${config.iconBg} text-white` : 'bg-slate-50 dark:bg-slate-700 text-slate-400'
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-inner ${
+                isActive ? `${config.iconBg} text-white` : 'bg-slate-50 text-slate-300'
               }`}>
                 {s.icon}
               </div>
               <div className="text-left">
-                <p className={`text-[10px] font-black uppercase tracking-tighter leading-none ${isActive ? config.text : 'text-slate-900 dark:text-white'}`}>
+                <p className={`text-[10px] font-black uppercase tracking-tighter leading-none transition-colors ${isActive ? config.text : 'text-slate-900'}`}>
                   {s.name}
                 </p>
-                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Super App</p>
+                <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mt-1 italic">Active Hub</p>
               </div>
               {isActive && (
                 <motion.div layoutId="active-pill" className="ml-2">

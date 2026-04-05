@@ -53,47 +53,47 @@ const RideHub = () => {
 
     if (loading) {
         return (
-            <div className="bg-[#010103] min-h-screen flex items-center justify-center">
+            <div className="bg-slate-50 min-h-screen flex items-center justify-center">
                  <div className="flex flex-col items-center gap-6">
-                    <div className="w-24 h-24 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin shadow-2xl" />
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500 animate-pulse">Syncing Pilot Grid...</p>
+                    <div className="w-24 h-24 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin shadow-2xl" />
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 animate-pulse">Syncing Pilot Grid...</p>
                  </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-[#010103] min-h-screen relative overflow-hidden flex flex-col">
+        <div className="bg-slate-50 min-h-screen relative overflow-hidden flex flex-col">
             
             {/* Background Map Layer - Full Screen */}
-            <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 z-0 opacity-80 contrast-125">
                 <RideMap destination={destination ? [19.0760, 72.8777] : null} />
             </div>
 
             {/* Top Command Overlay (Search & Stats) */}
             <div className="relative z-10 p-6 flex flex-col md:flex-row gap-6 max-w-7xl mx-auto w-full">
-                <div className="bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-4 flex flex-col md:flex-row items-center gap-4 flex-1 shadow-4xl group transition-all hover:bg-black/80">
-                    <div className="flex items-center gap-4 px-6 border-b md:border-b-0 md:border-r border-white/5 pb-4 md:pb-0 w-full md:w-auto">
-                        <MapPin size={20} className="text-amber-500 animate-pulse" />
-                        <div className="flex flex-col">
-                            <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Current Site</span>
-                            <span className="text-[10px] font-black text-white uppercase tracking-tighter truncate max-w-[120px]">{pickup}</span>
+                <div className="bg-white/80 backdrop-blur-3xl border border-slate-100 rounded-[2.5rem] p-4 flex flex-col md:flex-row items-center gap-4 flex-1 shadow-xl group transition-all hover:bg-white">
+                    <div className="flex items-center gap-4 px-6 border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 w-full md:w-auto">
+                        <MapPin size={20} className="text-blue-600 animate-pulse" />
+                        <div className="flex flex-col text-left">
+                            <span className="text-[8px] font-black uppercase tracking-widest text-slate-400">Current Site</span>
+                            <span className="text-[10px] font-black text-slate-900 uppercase tracking-tighter truncate max-w-[120px]">{pickup}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-6 flex-1 px-6 w-full">
-                        <Navigation size={20} className="text-white rotate-45 group-hover:scale-125 transition-transform" />
+                        <Navigation size={20} className="text-slate-900 rotate-45 group-hover:scale-125 transition-transform" />
                         <input 
                             value={destination}
                             onChange={(e) => setDestination(e.target.value)}
                             placeholder="Enter Target Hub Destination..."
-                            className="bg-transparent border-none outline-none text-[12px] font-black uppercase tracking-[0.2em] text-white w-full placeholder-slate-700"
+                            className="bg-transparent border-none outline-none text-[12px] font-black uppercase tracking-[0.2em] text-slate-900 w-full placeholder-slate-300"
                         />
                     </div>
                 </div>
 
-                <div className="bg-amber-500 text-black px-10 py-4 rounded-[2.5rem] flex items-center gap-6 shadow-2xl shadow-amber-500/20 whitespace-nowrap">
+                <div className="bg-blue-600 text-white px-10 py-4 rounded-[2.5rem] flex items-center gap-6 shadow-xl shadow-blue-500/20 whitespace-nowrap">
                     <Zap size={24} className="animate-bounce" />
-                    <div>
+                    <div className="text-left">
                         <p className="text-[8px] font-black uppercase tracking-widest leading-none">Traffic Density</p>
                         <p className="text-[14px] font-black uppercase tracking-tighter leading-none">Low Protocol</p>
                     </div>
@@ -108,9 +108,9 @@ const RideHub = () => {
                             initial={{ y: 200, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 200, opacity: 0 }}
-                            className="max-w-4xl mx-auto bg-black/60 backdrop-blur-3xl border-2 border-white/10 rounded-[4rem] p-10 shadow-4xl"
+                            className="max-w-4xl mx-auto bg-white/90 backdrop-blur-3xl border-2 border-slate-100 rounded-[4rem] p-10 shadow-2xl"
                         >
-                            <div className="flex flex-wrap md:flex-nowrap gap-6 overflow-x-auto no-scrollbar pb-8 mb-8 border-b border-white/5">
+                            <div className="flex flex-wrap md:flex-nowrap gap-6 overflow-x-auto no-scrollbar pb-8 mb-8 border-b border-slate-100">
                                 {rideTypes.map(type => (
                                     <button 
                                         key={type.id}
@@ -120,8 +120,8 @@ const RideHub = () => {
                                         }}
                                         className={`flex flex-col items-center gap-3 p-6 rounded-[2.5rem] transition-all min-w-[120px] group ${
                                             selectedRide?.category === type.id 
-                                            ? 'bg-amber-500 text-black scale-110 shadow-4xl shadow-amber-500/20' 
-                                            : 'bg-white/5 text-slate-500 border border-white/5 hover:border-amber-500/30'
+                                            ? 'bg-blue-600 text-white scale-110 shadow-xl shadow-blue-500/20' 
+                                            : 'bg-slate-50 text-slate-400 border border-slate-100 hover:border-blue-500/30'
                                         }`}
                                     >
                                         <div className="group-hover:translate-y-[-5px] transition-transform">{type.icon}</div>
@@ -132,23 +132,23 @@ const RideHub = () => {
 
                             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                                 <div className="flex items-center gap-6">
-                                    <div className="w-20 h-20 bg-white/5 rounded-3xl p-4 flex items-center justify-center border border-white/10">
-                                        <img src={selectedRide?.images[0]} className="w-full h-full object-contain" alt="ride" />
+                                    <div className="w-20 h-20 bg-slate-50 rounded-3xl p-4 flex items-center justify-center border border-slate-100 shadow-inner">
+                                        <img src={selectedRide?.images?.[0]} className="w-full h-full object-contain" alt="ride" />
                                     </div>
                                     <div className="text-left">
-                                        <h3 className="text-3xl font-black text-white tracking-tighter uppercase leading-tight">{selectedRide?.name || 'Elite Hub Car'}</h3>
+                                        <h3 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-tight">{selectedRide?.name || 'Elite Hub Car'}</h3>
                                         <div className="flex items-center gap-4">
-                                            <p className="text-amber-500 font-black text-xl">₹{selectedRide?.price || 0}</p>
-                                            <div className="w-1 h-1 bg-slate-700 rounded-full" />
-                                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">{selectedRide?.timeToDeliver || '4 mins'} Away</p>
+                                            <p className="text-blue-600 font-black text-xl">₹{selectedRide?.price || 0}</p>
+                                            <div className="w-1 h-1 bg-slate-200 rounded-full" />
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">{selectedRide?.timeToDeliver || '4 mins'} Away</p>
                                         </div>
                                     </div>
                                 </div>
                                 <button 
                                     onClick={handleReqestRide}
-                                    className="px-16 py-8 bg-amber-500 text-black text-[13px] font-black uppercase tracking-[0.4em] rounded-[3rem] shadow-4xl shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-4 group"
+                                    className="px-16 py-8 bg-blue-600 text-white text-[13px] font-black uppercase tracking-[0.4em] rounded-[3rem] shadow-xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-4 group"
                                 >
-                                    Confirm Command <Zap size={20} className="fill-black group-hover:scale-150 transition-transform" />
+                                    Confirm Command <Zap size={20} className="fill-white group-hover:scale-150 transition-transform" />
                                 </button>
                             </div>
                         </motion.div>
@@ -156,48 +156,48 @@ const RideHub = () => {
                         <motion.div 
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="max-w-2xl mx-auto bg-black/90 backdrop-blur-4xl border-4 border-amber-500 p-12 rounded-[5rem] shadow-4xl text-center space-y-10 relative overflow-hidden"
+                            className="max-w-2xl mx-auto bg-white/95 backdrop-blur-4xl border-4 border-blue-600 p-12 rounded-[5rem] shadow-2xl text-center space-y-10 relative overflow-hidden"
                         >
-                            <div className="absolute top-0 right-0 left-0 h-2 bg-amber-500/10 overflow-hidden">
+                            <div className="absolute top-0 right-0 left-0 h-2 bg-blue-500/10 overflow-hidden">
                                 <motion.div 
                                     initial={{ x: "-100%" }}
                                     animate={{ x: "100%" }}
                                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                    className="h-full w-1/3 bg-amber-500 shadow-2xl shadow-amber-500"
+                                    className="h-full w-1/3 bg-blue-600 shadow-xl shadow-blue-600"
                                 />
                             </div>
 
                             <div className="flex flex-col items-center gap-6">
-                                <div className="w-32 h-32 bg-amber-500 rounded-[3rem] flex items-center justify-center p-8 animate-pulse shadow-4xl shadow-amber-500/30">
-                                    <Activity size={60} className="text-black" />
+                                <div className="w-32 h-32 bg-blue-600 rounded-[3rem] flex items-center justify-center p-8 animate-pulse shadow-xl shadow-blue-500/30">
+                                    <Activity size={60} className="text-white" />
                                 </div>
                                 <div className="space-y-2">
-                                     <h3 className="text-5xl font-black uppercase text-white tracking-tighter">
+                                     <h3 className="text-5xl font-black uppercase text-slate-900 tracking-tighter">
                                          {bookingStatus === 'Searching' && 'Connecting...'}
                                          {bookingStatus === 'Confirmed' && 'Pilot Interlock'}
                                          {bookingStatus === 'Arriving' && 'Pilot Inbound'}
                                      </h3>
-                                     <p className="text-amber-500 text-[10px] font-black uppercase tracking-[0.4em] animate-pulse">Syncing GPS Coordinates</p>
+                                     <p className="text-blue-600 text-[10px] font-black uppercase tracking-[0.4em] animate-pulse">Syncing GPS Coordinates</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between bg-white/5 p-8 rounded-[3rem] border border-white/5">
+                            <div className="flex items-center justify-between bg-slate-50 p-8 rounded-[3rem] border border-slate-100 shadow-inner">
                                 <div className="flex items-center gap-6">
-                                     <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-slate-700">
+                                     <div className="w-16 h-16 bg-white rounded-2xl border border-slate-100 flex items-center justify-center text-slate-300">
                                          <User size={32} />
                                      </div>
                                      <div className="text-left">
-                                         <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Elite Pilot</p>
-                                         <p className="text-[14px] font-black text-white uppercase tracking-tighter">Captain Prajesh V4</p>
+                                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Elite Pilot</p>
+                                         <p className="text-[14px] font-black text-slate-900 uppercase tracking-tighter">Captain Active V4</p>
                                      </div>
                                 </div>
                                 <div className="flex gap-4">
-                                     <div className="w-14 h-14 bg-green-500 rounded-[1.5rem] flex items-center justify-center text-black shadow-4xl cursor-pointer hover:scale-110 transition-transform">
+                                     <div className="w-14 h-14 bg-green-500 rounded-[1.5rem] flex items-center justify-center text-white shadow-xl cursor-pointer hover:scale-110 transition-transform">
                                          <Phone size={24} />
                                      </div>
                                      <div 
                                         onClick={() => setBookingStatus('Idle')}
-                                        className="w-14 h-14 bg-red-500 rounded-[1.5rem] flex items-center justify-center text-white shadow-4xl cursor-pointer hover:scale-110 transition-transform"
+                                        className="w-14 h-14 bg-red-500 rounded-[1.5rem] flex items-center justify-center text-white shadow-xl cursor-pointer hover:scale-110 transition-transform"
                                      >
                                          <AlertTriangle size={24} />
                                      </div>
@@ -210,12 +210,12 @@ const RideHub = () => {
 
             {/* Global Captain Hub Bridge - Mini Overlay */}
             <div className="absolute top-24 right-10 z-20 hidden lg:block">
-                 <Link to="/captain-dashboard" className="px-8 py-5 bg-black/40 backdrop-blur-3xl border border-white/10 rounded-full flex items-center gap-4 group transition-all hover:bg-amber-500 hover:text-black shadow-4xl">
-                    <User size={18} className="text-amber-500 group-hover:text-black transition-colors" />
+                 <Link to="/captain-dashboard" className="px-8 py-5 bg-white/80 backdrop-blur-3xl border border-slate-100 rounded-full flex items-center gap-4 group transition-all hover:bg-blue-600 hover:text-white shadow-xl">
+                    <User size={18} className="text-blue-600 group-hover:text-white transition-colors" />
                     <span className="text-[10px] font-black uppercase tracking-widest">Pilot Console</span>
                  </Link>
             </div>
-            <p className="fixed bottom-4 left-1/2 -translate-x-1/2 text-[8px] font-black text-slate-800 uppercase tracking-[0.5em] z-20 pointer-events-none">Midnight Professional Command Center V4</p>
+            <p className="fixed bottom-4 left-1/2 -translate-x-1/2 text-[8px] font-black text-slate-300 uppercase tracking-[0.5em] z-20 pointer-events-none">Active Professional Command Center V4</p>
         </div>
     );
 };

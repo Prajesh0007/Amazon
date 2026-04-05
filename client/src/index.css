@@ -3,41 +3,40 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0a0a0c;
-  --color-primary-light: #1b263b;
-  --color-secondary: #D4AF37; /* Rose Gold/Gold */
-  --color-secondary-hover: #AA8B2B;
+  --color-primary: #0061ff; /* Active Azure */
+  --color-primary-light: #e6f0ff;
+  --color-secondary: #ffb703; /* Vibrant Amber */
+  --color-secondary-hover: #fb8500;
   
-  --color-midnight-base: #010103;
-  --color-midnight-navy: #0d1b2a;
-  --color-midnight-gold: #D4AF37;
-  --color-midnight-rose: #E0B0FF;
+  --color-bright-base: #f8f9fa;
+  --color-bright-white: #ffffff;
+  --color-bright-accent: #0061ff;
   
   --font-display: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
   --font-heading: "Outfit", sans-serif;
 
-  --shadow-3xl: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
-  --shadow-4xl: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
+  --shadow-3xl: 0 35px 60px -15px rgba(0, 0, 0, 0.1);
+  --shadow-4xl: 0 50px 100px -20px rgba(0, 0, 0, 0.15);
 }
 
 :root {
-  --primary: #F8F9FA;
-  --secondary: #D4AF37;
-  --accent: #1b263b;
-  --bg-light: #ffffff;
+  --primary: #0061ff;
+  --secondary: #ffb703;
+  --accent: #0061ff;
+  --bg-light: #f8f9fa;
   --card-light: #ffffff;
   --text-primary: #121212;
-  --text-secondary: #6B7280;
-  --premium-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.08), 0 18px 36px -18px rgba(0, 0, 0, 0.05);
+  --text-secondary: #64748b;
+  --premium-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 10px 20px -15px rgba(0, 0, 0, 0.03);
 }
 
 .dark {
-  --primary: #0a0a0c;
-  --secondary: #D4AF37;
-  --accent: #E0B0FF;
-  --bg-light: #010103;
-  --card-light: #0d1b2a;
+  --primary: #0061ff;
+  --secondary: #ffb703;
+  --accent: #ffffff;
+  --bg-light: #0f172a;
+  --card-light: #1e293b;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --premium-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 18px 36px -18px rgba(0, 0, 0, 0.4);
@@ -66,38 +65,38 @@
 
 @layer components {
   .amazon-button {
-    @apply relative overflow-hidden px-10 py-4 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-500;
-    background: linear-gradient(135deg, #D4AF37, #AA8B2B);
-    color: #000;
-    box-shadow: 0 15px 35px -10px rgba(212, 175, 55, 0.4);
+    @apply relative overflow-hidden px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-500;
+    background: linear-gradient(135deg, #0061ff, #00d2ff);
+    color: #fff;
+    box-shadow: 0 20px 30px -10px rgba(0, 97, 255, 0.3);
   }
   
   .amazon-button:hover {
-    @apply -translate-y-1 scale-[1.03] shadow-2xl;
+    @apply -translate-y-1 scale-[1.03];
     filter: brightness(1.1);
-    box-shadow: 0 25px 50px -12px rgba(212, 175, 55, 0.6);
+    box-shadow: 0 30px 50px -12px rgba(0, 97, 255, 0.5);
   }
   
   .amazon-button:active {
     @apply scale-[0.97] translate-y-0.5;
   }
   
-  .midnight-glass {
-    @apply bg-white/70 dark:bg-black/40 backdrop-blur-3xl border border-white/20 dark:border-white/5 rounded-[3rem] shadow-4xl;
+  .bright-glass {
+    @apply bg-white/80 dark:bg-black/40 backdrop-blur-3xl border border-white/20 dark:border-white/5 rounded-[3rem] shadow-4xl;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  .midnight-glass:hover {
+  .bright-glass:hover {
     @apply border-white/40 dark:border-white/10 -translate-y-2;
     box-shadow: var(--premium-shadow);
   }
 
   .nav-link {
-    @apply text-slate-400 font-black text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-white relative px-4 py-2;
+    @apply text-slate-500 font-black text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-blue-600 relative px-4 py-2;
   }
   
   .nav-link::after {
-    @apply content-[''] absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-amber-500 transition-all duration-500 rounded-full;
+    @apply content-[''] absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-blue-600 transition-all duration-500 rounded-full;
   }
   
   .nav-link:hover::after {
@@ -105,15 +104,15 @@
   }
   
   .input-field {
-    @apply w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-transparent rounded-[1.5rem] px-8 py-5 outline-none transition-all duration-500 focus:ring-8 focus:ring-amber-500/5 focus:border-amber-500/30 font-black text-[10px] uppercase tracking-widest dark:text-white;
+    @apply w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-transparent rounded-[1.5rem] px-8 py-5 outline-none transition-all duration-500 focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500/30 font-black text-[10px] uppercase tracking-widest dark:text-white shadow-sm;
   }
   
   .premium-gradient {
-    background: radial-gradient(circle at top left, #1b263b, #0a0a0c);
+    background: radial-gradient(circle at top left, #f8f9fa, #ffffff);
   }
 
   .text-glow-gold {
-    text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 30px rgba(255, 183, 3, 0.3);
   }
 }
 
@@ -138,21 +137,21 @@
   animation: slow-pan 20s ease-in-out infinite;
 }
 
-/* Custom Scrollbar for Midnight Theme */
+/* Custom Scrollbar for Bright Theme */
 ::-webkit-scrollbar {
   width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-50 dark:bg-[#010103];
+  @apply bg-[#f8f9fa] dark:bg-[#0f172a];
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 dark:bg-slate-800 rounded-full border-4 border-solid border-slate-50 dark:border-[#010103] transition-all;
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full border-4 border-solid border-[#f8f9fa] dark:border-[#0f172a] transition-all;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-amber-500;
+  @apply bg-blue-500;
 }
 
 .no-scrollbar::-webkit-scrollbar {

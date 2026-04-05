@@ -34,10 +34,10 @@ const GroceryHub = () => {
 
     if (loading) {
         return (
-            <div className="bg-[#010103] min-h-screen pb-20 pt-32 px-6">
+            <div className="bg-slate-50 min-h-screen pb-20 pt-32 px-6">
                 <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                        <div key={n} className="bg-slate-900/40 animate-pulse rounded-[3.5rem] h-[350px] border border-white/5" />
+                        <div key={n} className="bg-white animate-pulse rounded-[3.5rem] h-[350px] border border-slate-100 shadow-sm" />
                     ))}
                 </div>
             </div>
@@ -45,30 +45,30 @@ const GroceryHub = () => {
     }
 
     return (
-        <div className="bg-[#010103] dark:bg-[#010103] min-h-screen pb-20 overflow-hidden">
+        <div className="bg-slate-50 min-h-screen pb-20 overflow-hidden">
             {/* Header Hub */}
-            <div className="bg-black/60 backdrop-blur-3xl border-b border-white/5 px-6 py-12 sticky top-[4.5rem] z-40 shadow-2xl">
+            <div className="bg-white/80 backdrop-blur-3xl border-b border-slate-100 px-6 py-12 sticky top-[4.5rem] z-40 shadow-sm">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 bg-amber-500/10 rounded-3xl flex items-center justify-center text-amber-500 shadow-2xl ring-4 ring-amber-500/5">
+                        <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
                             <ShoppingCart size={32} />
                         </div>
-                        <div className="space-y-1">
-                            <h1 className="text-4xl font-black tracking-tighter uppercase text-white leading-none font-elegant">
-                                Midnight <span className="text-amber-500 underline decoration-4 underline-offset-8">Market</span>
+                        <div className="space-y-1 text-left">
+                            <h1 className="text-4xl font-black tracking-tighter uppercase text-slate-900 leading-none font-elegant">
+                                Active <span className="text-blue-600 underline decoration-4 underline-offset-8">Market</span>
                             </h1>
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Elite 10-minute delivery active</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Elite 10-minute flux delivery active</p>
                         </div>
                     </div>
                     
-                    <div className="flex items-center gap-4 bg-white/5 rounded-[2rem] px-8 py-5 border border-white/10 w-full md:w-96 shadow-2xl focus-within:ring-8 focus-within:ring-amber-500/5 transition-all">
-                        <Search size={18} className="text-slate-500" />
+                    <div className="flex items-center gap-4 bg-slate-50 rounded-[2rem] px-8 py-5 border border-slate-200 w-full md:w-96 shadow-inner focus-within:ring-8 focus-within:ring-blue-500/5 transition-all">
+                        <Search size={18} className="text-slate-400" />
                         <input 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             type="text" 
                             placeholder="Discover fresh essentials..." 
-                            className="bg-transparent border-none outline-none w-full text-xs font-bold uppercase tracking-widest text-white placeholder-slate-700"
+                            className="bg-transparent border-none outline-none w-full text-xs font-bold uppercase tracking-widest text-slate-900 placeholder-slate-300"
                         />
                     </div>
                 </div>
@@ -81,10 +81,10 @@ const GroceryHub = () => {
                         <button
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id)}
-                            className={`flex items-center gap-4 px-10 py-5 rounded-[2.5rem] border font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:shadow-amber-500/10 whitespace-nowrap ${
+                            className={`flex items-center gap-4 px-10 py-5 rounded-[2.5rem] border font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-500 shadow-lg whitespace-nowrap ${
                                 selectedCategory === cat.id 
-                                ? 'bg-amber-500 text-black border-amber-500 shadow-amber-500/30 scale-105 z-10' 
-                                : 'bg-white/5 border-white/5 text-slate-500 hover:border-amber-500/30'
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-blue-600/30 scale-105 z-10' 
+                                : 'bg-white border-slate-100 text-slate-400 hover:border-blue-500/30'
                             }`}
                         >
                             <Box size={16} /> {cat.label}
@@ -95,42 +95,42 @@ const GroceryHub = () => {
                 {/* Vertical Subsection Previews: Dynamic Discovery */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {['Fruits', 'Vegetables', 'Dairy'].map(sub => (
-                        <div key={sub} className="p-12 bg-white/5 rounded-[4rem] border border-white/5 shadow-2xl space-y-10 group cursor-pointer hover:border-amber-500/30 transition-all relative overflow-hidden backdrop-blur-md">
-                             <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+                        <div key={sub} className="p-12 bg-white rounded-[4rem] border border-slate-100 shadow-xl space-y-10 group cursor-pointer hover:border-blue-500/30 transition-all relative overflow-hidden text-left">
+                             <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
                              <div className="flex items-center justify-between relative z-10">
-                                 <h3 className="text-3xl font-black uppercase tracking-tighter text-white font-elegant">{sub} <span className="text-amber-500">Estate</span></h3>
-                                 <ArrowRight className="text-slate-700 group-hover:text-amber-500 group-hover:translate-x-2 transition-all font-black" />
+                                 <h3 className="text-3xl font-black uppercase tracking-tighter text-slate-900 font-elegant">{sub} <span className="text-blue-600">Estate</span></h3>
+                                 <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-2 transition-all font-black" />
                              </div>
                              <div className="grid grid-cols-2 gap-6 relative z-10">
                                  {products.filter(p => p.category === sub).slice(0, 2).map((p, idx) => (
-                                     <div key={idx} className="aspect-square bg-black/40 rounded-[2rem] p-6 flex flex-col items-center justify-center shadow-4xl group-hover:shadow-amber-500/5 transition-all border border-white/5">
-                                         <img src={p.images[0]} alt="Item" className="w-full h-full object-contain group-hover:scale-125 transition-transform duration-1000" title={p.name} />
-                                         <p className="text-[8px] font-black text-slate-500 mt-3 line-clamp-1 truncate uppercase tracking-widest">{p.name || 'Organic'}</p>
+                                     <div key={idx} className="aspect-square bg-slate-50 rounded-[2rem] p-6 flex flex-col items-center justify-center shadow-inner border border-slate-100">
+                                         <img src={p.images?.[0]} alt="Item" className="w-full h-full object-contain group-hover:scale-125 transition-transform duration-1000" title={p.name} />
+                                         <p className="text-[8px] font-black text-slate-400 mt-3 line-clamp-1 truncate uppercase tracking-widest">{p.name || 'Organic'}</p>
                                      </div>
                                  ))}
                              </div>
-                             <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] text-center mt-6">Bio-Purity Protocol Active</p>
+                             <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] text-center mt-6">Bio-Purity Protocol Active</p>
                         </div>
                     ))}
                 </div>
 
-                {/* Main Product Inventory Node */}
+                {/* Main Product Inventory Hub */}
                 <div className="space-y-12">
-                    <div className="flex items-center justify-between border-b-2 border-white/5 pb-8">
-                        <h2 className="text-4xl font-black uppercase tracking-tighter text-white font-elegant">Elite <span className="text-amber-500">Inventory</span> Estates</h2>
-                        <div className="flex items-center gap-3 px-6 py-3 bg-amber-500/10 border border-amber-500/20 rounded-2xl shadow-4xl">
-                            <Zap size={14} className="text-amber-500 animate-pulse" />
-                            <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Instant Flux Active</span>
+                    <div className="flex items-center justify-between border-b-2 border-slate-100 pb-8">
+                        <h2 className="text-4xl font-black uppercase tracking-tighter text-slate-900 font-elegant text-left">Elite <span className="text-blue-600">Inventory</span> Estates</h2>
+                        <div className="flex items-center gap-3 px-6 py-3 bg-blue-50 border border-blue-100 rounded-2xl shadow-sm">
+                            <Zap size={14} className="text-blue-600 animate-pulse" />
+                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Instant Flux Active</span>
                         </div>
                     </div>
                     
                     <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10">
                         {filteredGrocery.length === 0 && !loading ? (
                              <div className="col-span-full py-40 text-center space-y-4">
-                                <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <Search size={32} className="text-slate-800" />
+                                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <Search size={32} className="text-slate-300" />
                                 </div>
-                                <h3 className="text-2xl font-black uppercase text-slate-800 tracking-tighter">Market Inventory Empty</h3>
+                                <h3 className="text-2xl font-black uppercase text-slate-300 tracking-tighter">Market Inventory Empty</h3>
                              </div>
                         ) : filteredGrocery.map((p, i) => (
                             <motion.div 
@@ -138,29 +138,29 @@ const GroceryHub = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 key={p._id} 
-                                className="bg-black/20 backdrop-blur-md rounded-[4rem] p-6 border border-white/5 shadow-2xl hover:shadow-amber-500/10 hover:border-amber-500/20 transition-all group relative overflow-hidden"
+                                className="bg-white rounded-[4rem] p-6 border border-slate-100 shadow-xl hover:shadow-2xl hover:border-blue-500/20 transition-all group relative overflow-hidden"
                             >
                                 <Link to={`/product/${p._id}`}>
-                                    <div className="relative aspect-square mb-8 bg-slate-900 rounded-[3rem] p-8 overflow-hidden shadow-4xl group-hover:shadow-amber-500/10 transition-all">
-                                        <img src={p.images[0]} className="w-full h-full object-contain group-hover:rotate-12 group-hover:scale-125 transition-transform duration-1000" alt={p.name} />
-                                        <div className="absolute top-4 left-4 flex items-center gap-2 px-4 py-2 bg-amber-500 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-4xl">
-                                            <Zap size={10} className="fill-black" /> {p.timeToDeliver || '12 Mins'}
+                                    <div className="relative aspect-square mb-8 bg-slate-50 rounded-[3rem] p-8 overflow-hidden shadow-inner group-hover:shadow-blue-500/5 transition-all">
+                                        <img src={p.images?.[0]} className="w-full h-full object-contain group-hover:rotate-12 group-hover:scale-125 transition-transform duration-1000" alt={p.name} />
+                                        <div className="absolute top-4 left-4 flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl">
+                                            <Zap size={10} /> {p.timeToDeliver || '12 Mins'}
                                         </div>
-                                        <div className="absolute bottom-4 right-4 text-[11px] font-black text-amber-500 bg-black/80 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/5 shadow-2xl">
-                                            <Star size={12} className="inline fill-amber-500 p-0.5" /> {p.rating}
+                                        <div className="absolute bottom-4 right-4 text-[11px] font-black text-blue-600 bg-white/90 px-3 py-1.5 rounded-xl backdrop-blur-md border border-slate-100 shadow-xl">
+                                            <Star size={12} className="inline fill-amber-500 text-amber-500 p-0.5" /> {p.rating}
                                         </div>
                                     </div>
-                                    <div className="space-y-6 px-4">
+                                    <div className="space-y-6 px-4 text-left">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-black text-amber-500/60 uppercase tracking-[0.3em] leading-none mb-2 italic">{p.brand || 'Midnight Fresh'}</p>
-                                            <h4 className="font-black text-xl text-white leading-tight uppercase line-clamp-1 tracking-tighter">{p.name}</h4>
+                                            <p className="text-[10px] font-black text-blue-600/60 uppercase tracking-[0.3em] leading-none mb-2 italic">{p.brand || 'Elite Fresh'}</p>
+                                            <h4 className="font-black text-xl text-slate-900 leading-tight uppercase line-clamp-1 tracking-tighter">{p.name}</h4>
                                         </div>
                                         
-                                        <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                                            <p className="text-3xl font-black text-white tracking-tighter">₹{p.price}</p>
+                                        <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                                            <p className="text-3xl font-black text-slate-900 tracking-tighter">₹{p.price}</p>
                                             <button 
                                                 onClick={(e) => { e.preventDefault(); handleAddToCart(p); }}
-                                                className="w-14 h-14 rounded-[1.5rem] bg-white/5 text-slate-500 flex items-center justify-center hover:bg-amber-500 hover:text-black transition-all shadow-4xl border border-white/10 active:scale-90"
+                                                className="w-14 h-14 rounded-[1.5rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-slate-100 active:scale-90"
                                             >
                                                 <Plus size={28} />
                                             </button>
@@ -175,7 +175,7 @@ const GroceryHub = () => {
             
             {/* Global Estate Map Button Simulation */}
             <div className="fixed bottom-12 left-12 z-50">
-                <button className="flex items-center gap-6 px-12 py-8 bg-amber-500 text-black rounded-[3rem] font-black text-[13px] uppercase tracking-[0.3em] shadow-4xl shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all">
+                <button className="flex items-center gap-6 px-12 py-8 bg-blue-600 text-white rounded-[3rem] font-black text-[13px] uppercase tracking-[0.3em] shadow-xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all">
                     Search Global Grid <Search size={24} />
                 </button>
             </div>
