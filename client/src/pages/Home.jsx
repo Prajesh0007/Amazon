@@ -1,202 +1,132 @@
-import { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Zap, Shield, Truck, Sparkles, Laptop, Gamepad, Headphones, Smartphone, Home as HomeIcon, Watch, BookOpen, Baby, Dumbbell, ShoppingBag, Car, Wrench } from 'lucide-react';
+import { ShoppingBag, Star, Zap, Shield, Clock, TrendingUp, ChevronRight, Search, Heart, LayoutGrid, Sparkles } from 'lucide-react';
 import useProductStore from '../store/useProductStore';
-import ProductGrid from '../components/ProductGrid';
-import SkeletonLoader from '../components/SkeletonLoader';
-import FlashSale from '../components/FlashSale';
-import BuyAgain from '../components/BuyAgain';
-import RecentlyViewed from '../components/RecentlyViewed';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const { products, loading, fetchProducts, fetchMoreProducts, page, pages, total, activeService } = useProductStore();
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [serviceType, setServiceType] = useState('Shopping');
+    const { products, fetchProducts, loading } = useProductStore();
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    console.log('--- Home Mount/Update Fetch ---', { serviceType, selectedCategory });
-    fetchProducts({ category: selectedCategory, pageNumber: 1, serviceType });
-  }, [fetchProducts, selectedCategory, serviceType]);
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
-  const handleLoadMore = () => {
-    if (page < pages) {
-      fetchMoreProducts({ category: selectedCategory, pageNumber: page + 1, serviceType });
-    }
-  };
+    const categories = [
+        { id: 'All', icon: <LayoutGrid size={20} />, label: 'All' },
+        { id: 'Electronics', icon: <Zap size={20} />, label: 'Tech' },
+        { id: 'Computing', icon: <TrendingUp size={18} />, label: 'PC' },
+        { id: 'Smart Home', icon: <Shield size={18} />, label: 'Security' },
+        { id: 'Fashion', icon: <Sparkles size={18} />, label: 'Vibe' },
+        { id: 'Sports', icon: <Star size={18} />, label: 'Pro' }
+    ];
 
-  const services = [
-    { id: 'Shopping', name: 'Elite Shop', icon: <ShoppingBag size={24} />, color: 'blue', desc: 'Amazon/Flipkart', path: '/' },
-    { id: 'Food', name: 'Instant Food', icon: <Zap size={24} />, color: 'orange', desc: 'Swiggy/Zomato', path: '/food-hub' },
-    { id: 'Grocery', name: 'Wait-Less', icon: <Truck size={24} />, color: 'green', desc: 'Zepto/Blinkit', path: '/grocery-hub' },
-    { id: 'Pharmacy', name: 'Health Hub', icon: <Shield size={24} />, color: 'red', desc: 'Apollo/1mg', path: '/health-hub' },
-    { id: 'Stay', name: 'Stay Hub', icon: <HomeIcon size={24} />, color: 'purple', desc: 'Airbnb/Hotels', path: '/stay-hub' },
-    { id: 'Ride', name: 'Ride Hub', icon: <Car size={24} />, color: 'indigo', desc: 'Uber/Ola', path: '/ride-hub' },
-    { id: 'Genius', name: 'Genius Hub', icon: <Wrench size={24} />, color: 'amber', desc: 'Urban Company', path: '/genius-hub' },
-  ];
+    const bestSellers = products.filter(p => p.isBestSeller).slice(0, 8);
 
-  const categories = [
-    { name: 'All', icon: <Sparkles size={18} /> },
-    { name: 'Electronics', icon: <Laptop size={18} /> },
-    { name: 'Computing', icon: <Gamepad size={18} /> },
-    { name: 'Audio', icon: <Headphones size={18} /> },
-    { name: 'Mobile', icon: <Smartphone size={18} /> },
-    { name: 'Home', icon: <HomeIcon size={18} /> },
-    { name: 'Fashion', icon: <Watch size={18} /> },
-    { name: 'Toys', icon: <Baby size={18} /> },
-    { name: 'Sports', icon: <Dumbbell size={18} /> },
-    { name: 'Grocery', icon: <ShoppingBag size={18} /> },
-    { name: 'Books', icon: <BookOpen size={18} /> },
-  ];
+    const filteredProducts = products.filter(p => 
+        (selectedCategory === 'All' || p.category === selectedCategory) &&
+        (p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.category.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
 
-  return (
-    <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-32 transition-colors duration-700">
-      {/* Super App Service Hub */}
-      <div className="max-w-7xl mx-auto pt-16 px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 pb-12">
-        {services.map((s) => (
-          <Link
-            key={s.id}
-            to={s.path}
-            onClick={() => setServiceType(s.id)}
-            className={`relative overflow-hidden group p-6 rounded-[2.5rem] border-2 transition-all duration-500 hover:scale-105 active:scale-95 block ${
-              serviceType === s.id 
-              ? `bg-${s.color}-500/10 border-${s.color}-500 shadow-2xl shadow-${s.color}-500/20` 
-              : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800'
-            }`}
-          >
-            <div className={`w-12 h-12 rounded-2xl mb-4 flex items-center justify-center transition-all ${
-              serviceType === s.id ? `bg-${s.color}-500 text-white` : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
-            }`}>
-              {s.icon}
+    return (
+        <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20">
+            {/* Super Search & Banner */}
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 px-6 py-16 text-center">
+                <div className="max-w-4xl mx-auto space-y-8">
+                    <h1 className="text-6xl font-black uppercase tracking-tighter dark:text-white leading-none">
+                        Amazon <span className="text-indigo-600 underline decoration-8 underline-offset-8">Super App</span>
+                    </h1>
+                    <p className="text-sm font-black text-slate-400 uppercase tracking-widest leading-none italic">Omni-commerce • Food • Ride • Stay • Genius Pro</p>
+                    
+                    <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800 rounded-full px-10 py-6 border border-slate-100 dark:border-slate-700 shadow-inner w-full max-w-2xl mx-auto mt-12 transition-all focus-within:ring-8 focus-within:ring-indigo-500/10">
+                        <Search size={24} className="text-slate-400" />
+                        <input 
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            type="text" 
+                            placeholder="Find anything in the ecosystem..." 
+                            className="bg-transparent border-none outline-none w-full text-sm font-bold uppercase tracking-widest dark:text-white"
+                        />
+                    </div>
+                </div>
             </div>
-            <h3 className={`text-lg font-black uppercase tracking-tighter ${serviceType === s.id ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
-              {s.name}
-            </h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.desc}</p>
-          </Link>
-        ))}
-      </div>
 
-      {/* Hero Section */}
-      <div className="relative h-[450px] mx-6 rounded-[3rem] overflow-hidden bg-slate-900 group shadow-3xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent z-10" />
-        <div className="absolute inset-0 flex items-center px-16 z-20">
-          <div className="max-w-2xl space-y-6">
-             <motion.div
-              layoutId="badge"
-              className={`inline-flex items-center gap-2 px-5 py-2 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-4`}
-             >
-                <div className={`w-2 h-2 rounded-full animate-ping ${serviceType === 'Food' ? 'bg-orange-500' : 'bg-amber-500'}`} />
-                <span className="text-[10px] font-black text-white uppercase tracking-[0.5em]">
-                  {serviceType === 'Food' ? 'Express Delivery' : 'Premium Selection'}
-                </span>
-             </motion.div>
-             <motion.h1 
-               layoutId="title"
-               className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.8] uppercase"
-             >
-               {serviceType === 'Shopping' && <>MODERN <br /><span className="text-blue-500">UTILITY</span></>}
-               {serviceType === 'Food' && <>CRAVE <br /><span className="text-orange-500">INSTANT</span></>}
-               {serviceType === 'Grocery' && <>DAILY <br /><span className="text-green-500">FRESH</span></>}
-               {serviceType === 'Pharmacy' && <>CARE <br /><span className="text-red-500">VITAL</span></>}
-               {serviceType === 'Stay' && <>ESCAPE <br /><span className="text-purple-500">LUXURY</span></>}
-               {serviceType === 'Ride' && <>MOVE <br /><span className="text-indigo-500">ELITE</span></>}
-               {serviceType === 'Genius' && <>FIX <br /><span className="text-amber-500">GENIUS</span></>}
-             </motion.h1>
-          </div>
+            <div className="max-w-7xl mx-auto px-6 py-12 space-y-20">
+                
+                {/* Discovery Categories */}
+                <div className="flex gap-4 overflow-x-auto no-scrollbar py-4 px-2">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat.id}
+                            onClick={() => setSelectedCategory(cat.id)}
+                            className={`flex items-center gap-3 px-8 py-5 rounded-3xl border font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-transparent hover:shadow-indigo-500/10 whitespace-nowrap ${
+                                selectedCategory === cat.id 
+                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-indigo-600/20 scale-105 z-10' 
+                                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-400 hover:border-indigo-500/30'
+                            }`}
+                        >
+                            {cat.icon} {cat.label}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Best Sellers Row */}
+                <div className="space-y-8">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-3xl font-black uppercase tracking-tighter dark:text-white flex items-center gap-3">
+                            Best <span className="text-orange-500">Sellers</span> <Star size={24} className="fill-orange-500 text-orange-500" />
+                        </h2>
+                        <Link to="/search?category=Best Sellers" className="text-[10px] font-black uppercase tracking-widest text-indigo-500 hover:underline">View Global Rank <ChevronRight size={12} className="inline" /></Link>
+                    </div>
+                    <div className="flex gap-8 overflow-x-auto no-scrollbar px-2 py-4 pb-12">
+                        {bestSellers.map((p) => (
+                            <Link key={p._id} to={`/product/${p._id}`} className="flex-shrink-0 w-64 group bg-white dark:bg-slate-900 rounded-[3rem] p-6 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-3xl transition-all relative overflow-hidden">
+                                <div className="absolute top-6 left-6 z-10 bg-orange-500 text-white text-[8px] font-black px-2 py-1 rounded-lg shadow-lg">#1 RANK</div>
+                                <div className="aspect-square bg-slate-50 dark:bg-slate-800 rounded-[2.5rem] p-6 mb-6 overflow-hidden">
+                                    <img src={p.images[0]} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" alt={p.name} />
+                                </div>
+                                <div className="space-y-2 text-center">
+                                    <h3 className="font-black text-xs dark:text-white uppercase line-clamp-1">{p.name}</h3>
+                                    <p className="text-lg font-black text-indigo-600">₹{p.price}</p>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Main Product Grid */}
+                <div className="space-y-8">
+                    <h2 className="text-3xl font-black uppercase tracking-tighter dark:text-white">Eco <span className="text-slate-400">Inventory</span></h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                        {filteredProducts.map((p) => (
+                            <Link key={p._id} to={`/product/${p._id}`} className="group bg-white dark:bg-slate-900 p-6 rounded-[3rem] border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all flex flex-col justify-between">
+                                <div>
+                                    <div className="aspect-square bg-slate-50 dark:bg-slate-800 rounded-[2.5rem] p-6 mb-6 relative overflow-hidden group-hover:shadow-inner">
+                                        <img src={p.images[0]} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" alt={p.name} />
+                                        {p.isPrime && (
+                                            <div className="absolute top-2 left-2 px-2 py-1 bg-yellow-400 text-slate-900 text-[8px] font-black rounded-lg shadow-sm tracking-widest border border-yellow-500/20 uppercase">Prime</div>
+                                        )}
+                                        <div className="absolute bottom-2 right-2 flex gap-1 items-center px-3 py-1 bg-white/90 dark:bg-slate-900/90 rounded-full text-[10px] font-black dark:text-white shadow-xl backdrop-blur-md">
+                                            <Star size={10} className="fill-orange-400 text-orange-400" /> {p.rating}
+                                        </div>
+                                    </div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">{p.serviceType} • {p.category}</p>
+                                    <h3 className="font-black text-sm dark:text-white uppercase leading-tight line-clamp-2">{p.name || 'Elite SuperApp Node'}</h3>
+                                </div>
+                                <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-50 dark:border-slate-800">
+                                    <span className="text-xl font-black dark:text-white">₹{p.price}</span>
+                                    <button className="p-3 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all shadow-xl shadow-indigo-500/0 hover:shadow-indigo-500/20">
+                                        <ChevronRight size={18} />
+                                    </button>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
-        <motion.img 
-          key={serviceType}
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.6 }}
-          src={
-            serviceType === 'Shopping' ? "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80" :
-            serviceType === 'Food' ? "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600&q=80" :
-            serviceType === 'Stay' ? "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80" :
-            serviceType === 'Ride' ? "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=1600&q=80" :
-            "https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80"
-          } 
-          className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"
-        />
-      </div>
-
-      <div className="max-w-7xl mx-auto mt-16 relative z-30 px-6 space-y-16">
-        
-        {/* Quick Hub Access */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Link to="/orders" className="p-8 bg-black dark:bg-white text-white dark:text-black rounded-[2.5rem] flex items-center justify-between group shadow-2xl">
-            <div className="space-y-1">
-              <h4 className="text-2xl font-black uppercase tracking-tight">Consumer Dashboard</h4>
-              <p className="text-xs opacity-60 font-medium uppercase tracking-widest">Track all 4 service orders</p>
-            </div>
-            <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-black/10 flex items-center justify-center group-hover:translate-x-2 transition-transform">
-              <ChevronRight size={24} />
-            </div>
-          </Link>
-          <Link to="/seller" className="p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] flex items-center justify-between group shadow-sm">
-            <div className="space-y-1">
-              <h4 className="text-2xl font-black uppercase tracking-tight">Seller Hub</h4>
-              <p className="text-xs opacity-60 font-medium uppercase tracking-widest">Manage Restaurant / Store / Shop</p>
-            </div>
-            <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:translate-x-2 transition-transform">
-              <ChevronRight size={24} />
-            </div>
-          </Link>
-        </div>
-
-        {/* Category Pills */}
-        <div className="flex flex-wrap justify-center gap-3">
-          {categories.map((cat, i) => (
-            <motion.button
-              key={cat.name}
-              onClick={() => setSelectedCategory(cat.name)}
-              className={`flex items-center gap-3 px-6 py-4 rounded-[1.5rem] border font-black text-xs uppercase tracking-widest transition-all duration-500 ${
-                selectedCategory === cat.name 
-                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl scale-110 z-10' 
-                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500'
-              }`}
-            >
-              {cat.icon}
-              {cat.name}
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Product Listing */}
-        <div className="space-y-10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-100 dark:border-gray-800 pb-10">
-            <div className="space-y-1 text-center md:text-left">
-              <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">
-                {serviceType} <span className="text-slate-400">Essentials</span>
-              </h2>
-              <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">
-                Found {total || 0} Assets optimized for {serviceType}
-              </p>
-            </div>
-          </div>
-          
-          <div className="min-h-[400px]">
-            {loading && page === 1 ? (
-              <SkeletonLoader key="skeleton" />
-            ) : (
-              <ProductGrid products={products} loading={false} />
-            )}
-
-            {!loading && products.length > 0 && page < pages && (
-              <div className="flex justify-center mt-12 pb-12">
-                <button
-                  onClick={handleLoadMore}
-                  className="amazon-button px-12 py-4 text-lg font-black tracking-widest uppercase transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-amber-500/20"
-                >
-                  Load More Items
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Home;

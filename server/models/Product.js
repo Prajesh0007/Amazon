@@ -38,6 +38,14 @@ const productSchema = new mongoose.Schema({
     default: 'Shopping' 
   },
   isVeg: { type: Boolean },
+  ingredients: [{ type: String }],
+  recipe: { type: String },
+  cookingTime: { type: Number },
+  amenities: [{ type: String }],
+  views: [{ type: String }],
+  maxGuests: { type: Number },
+  hasAC: { type: Boolean },
+  isBestSeller: { type: Boolean, default: false },
   timeToDeliver: { type: String, default: '2-4 Days' },
   business: {
     type: mongoose.Schema.Types.ObjectId,

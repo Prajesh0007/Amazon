@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Package, Plus, DollarSign, TrendingUp, UserCheck } from 'lucide-react';
+import { Package, Plus, DollarSign, TrendingUp, UserCheck, Truck, Shield } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 import toast from 'react-hot-toast';
 
@@ -113,6 +113,13 @@ const SellerDashboard = () => {
     { id: 'Pharmacy', label: 'Medical Hub', icon: <Shield size={20} />, color: 'red' }
   ];
 
+  const colorMap = {
+    blue: 'bg-blue-500 text-white shadow-xl shadow-blue-500/20 border-blue-500',
+    orange: 'bg-orange-500 text-white shadow-xl shadow-orange-500/20 border-orange-500',
+    green: 'bg-green-500 text-white shadow-xl shadow-green-500/20 border-green-500',
+    red: 'bg-red-500 text-white shadow-xl shadow-red-500/20 border-red-500'
+  };
+
   return (
     <div className="bg-slate-50 dark:bg-slate-950 min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -134,7 +141,7 @@ const SellerDashboard = () => {
                 onClick={() => setBusinessType(type.id)}
                 className={`flex items-center gap-3 px-6 py-4 rounded-2xl border font-black text-[10px] uppercase tracking-widest transition-all ${
                   businessType === type.id 
-                  ? `bg-${type.color}-500 text-white shadow-xl shadow-${type.color}-500/20 border-${type.color}-500` 
+                  ? colorMap[type.color]
                   : 'bg-white dark:bg-slate-900 text-slate-400 border-slate-100 dark:border-slate-800'
                 }`}
               >

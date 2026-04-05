@@ -303,14 +303,65 @@ const ProductDetails = () => {
             <div className="lg:col-span-4 space-y-8">
                 <RatingBreakdown rating={product.rating} numReviews={product.numReviews} />
                 
-                {/* Service Specific Info */}
+                {/* Vertical Specific Protocol Info */}
                 {product.serviceType === 'Food' && (
-                  <div className="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-3xl border border-orange-100 dark:border-orange-800">
-                    <h4 className="text-sm font-black uppercase text-orange-600 mb-2">Restaurant Details</h4>
-                    <p className="text-xs font-bold dark:text-white mb-1">Delivered fresh from {product.brand || 'Local Kitchen'}</p>
-                    <p className="text-[10px] text-gray-500 font-bold tracking-widest">FOOD HUB VERIFIED</p>
+                  <div className="space-y-6">
+                    <div className="bg-orange-50 dark:bg-orange-900/20 p-8 rounded-[2.5rem] border-2 border-orange-100 dark:border-orange-800 shadow-xl shadow-orange-500/5">
+                      <h4 className="text-sm font-black uppercase text-orange-600 mb-6 flex items-center gap-3">
+                         <Info size={18} /> Chef's Protocol
+                      </h4>
+                      <div className="space-y-4">
+                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Secret Recipe Node</p>
+                         <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed italic">
+                            {product.recipe || 'This signature dish is prepared using high-grade organic elements and a traditional slow-cooking protocol.'}
+                         </p>
+                      </div>
+                      <div className="mt-8 pt-8 border-t border-orange-100 dark:border-orange-800">
+                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Master Ingredients</p>
+                         <div className="flex flex-wrap gap-2">
+                             {(product.ingredients || ['Artisanal Base', 'House Spices', 'Fresh Greens']).map((ing, i) => (
+                               <span key={i} className="px-3 py-1 bg-white dark:bg-slate-800 rounded-lg text-[9px] font-bold text-orange-600 border border-orange-100 dark:border-orange-800 uppercase tracking-wider shadow-sm">
+                                  {ing}
+                               </span>
+                             ))}
+                         </div>
+                      </div>
+                    </div>
+                    <div className="p-6 bg-slate-900 text-white rounded-[2rem] border border-orange-500/20">
+                       <p className="text-[10px] font-black uppercase tracking-widest text-orange-500 mb-1">Node Status</p>
+                       <p className="text-xs font-bold italic">FOOD HUB VERIFIED • 25 MINS ETA</p>
+                    </div>
                   </div>
                 )}
+
+                {product.serviceType === 'Stay' && (
+                  <div className="space-y-6">
+                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-8 rounded-[2.5rem] border-2 border-indigo-100 dark:border-indigo-800 shadow-xl shadow-indigo-500/5">
+                      <h4 className="text-sm font-black uppercase text-indigo-600 mb-6 flex items-center gap-3">
+                         <Home size={18} /> Elite Amenities
+                      </h4>
+                      <div className="grid grid-cols-2 gap-4">
+                         {(product.amenities || ['WiFi', 'Pool', 'AC', 'Gym', 'Breakfast']).map((am, i) => (
+                            <div key={i} className="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-2xl border border-indigo-50 dark:border-indigo-800">
+                               <Check size={14} className="text-indigo-500" />
+                               <span className="text-[10px] font-black uppercase text-slate-600 dark:text-slate-300 tracking-widest">{am}</span>
+                            </div>
+                         ))}
+                      </div>
+                      <div className="mt-8 pt-8 border-t border-indigo-100 dark:border-indigo-800 space-y-4">
+                         <div className="flex justify-between items-center">
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Node Capacity</span>
+                            <span className="text-xs font-black dark:text-white uppercase">{product.maxGuests || 4} Guests Max</span>
+                         </div>
+                         <div className="flex justify-between items-center">
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Climate Link</span>
+                            <span className="text-xs font-black text-green-500 uppercase">{product.hasAC ? 'AC Protocol Engage' : 'Standard'}</span>
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {product.serviceType === 'Pharmacy' && (
                   <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-3xl border border-blue-100 dark:border-blue-800">
                     <h4 className="text-sm font-black uppercase text-blue-600 mb-2">Health Hub Info</h4>
