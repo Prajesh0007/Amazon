@@ -16,6 +16,9 @@
   --font-display: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
   --font-heading: "Outfit", sans-serif;
+
+  --shadow-3xl: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+  --shadow-4xl: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
 }
 
 :root {
